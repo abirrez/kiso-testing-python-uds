@@ -31,10 +31,10 @@ class ThreadTimer(ITimer):
             if self.__timer.is_alive():
                 self.__timer.cancel()
 
-    def isExpired(self):
+    def is_expired(self):
         return self.__expired_flag
 
-    def isRunning(self):
+    def is_running(self):
         return self.__active_flag
 
     def __timerFunc(self):
@@ -50,12 +50,12 @@ if __name__ == "__main__":
     results = []
 
     for i in range(0, 10000):
-        startTime = perf_counter()
+        start_time = perf_counter()
         a.start()
-        while a.isExpired() == False:
+        while a.is_expired() == False:
             pass
-        endTime = perf_counter()
-        delta = endTime - startTime
+        end_time = perf_counter()
+        delta = end_time - start_time
         results.append(delta)
 
     gc.enable()

@@ -21,12 +21,12 @@ class UdsTestCase(unittest.TestCase):
     # these are inserted in reverse order to what you'd expect
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_udsSendWithResponse(self, testTp_send, testTp_recv):
+    def test_uds_send_with_response(self, test_tp_send, test_tp_recv):
 
-        testTp_send.return_value = False
-        testTp_recv.return_value = [0x50, 0x01]
+        test_tp_send.return_value = False
+        test_tp_recv.return_value = [0x50, 0x01]
 
-        udsConnection = Uds(transportProtocol="TEST")
+        udsConnection = Uds(transport_protocol = "TEST")
 
         a = udsConnection.send([0x10, 0x01])
 
@@ -34,24 +34,24 @@ class UdsTestCase(unittest.TestCase):
 
     # these are inserted in reverse order to what you'd expect
     @mock.patch("uds.TestTp.send")  # 2
-    def test_udsSendWithoutResponse(self, testTp_send):
+    def test_udsSendWithoutResponse(self, test_tp_send):
 
-        testTp_send.return_value = False
+        test_tp_send.return_value = False
 
-        udsConnection = Uds(transportProtocol="TEST")
+        udsConnection = Uds(transport_protocol = "TEST")
 
-        a = udsConnection.send([0x10, 0x01], responseRequired=False)
+        a = udsConnection.send([0x10, 0x01], response_required = False)
 
         self.assertEqual(None, None)
 
     # these are inserted in reverse order to what you'd expect
     @mock.patch("uds.TestTp.send")  # 2
-    def test_udsSendFunctionalRequest(self, testTp_send):
-        testTp_send.return_value = False
+    def test_udsSendFunctionalRequest(self, test_tp_send):
+        test_tp_send.return_value = False
 
-        udsConnection = Uds(transportProtocol="TEST")
+        udsConnection = Uds(transport_protocol = "TEST")
 
-        a = udsConnection.send([0x10, 0x01], functionalReq=True)
+        a = udsConnection.send([0x10, 0x01], functional_req = True)
 
         self.assertEqual(None, None)
 

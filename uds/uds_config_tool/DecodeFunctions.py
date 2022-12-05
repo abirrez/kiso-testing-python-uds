@@ -13,11 +13,11 @@ __status__ = "Development"
 from functools import reduce
 
 
-def extractBitFromPosition(aInt, position):
+def extract_bit_from_position(aInt, position):
     return (aInt & (2**position)) >> position
 
 
-def extractIntFromPosition(aInt, size, position):
+def extract_int_from_position(aInt, size, position):
     return (aInt >> position) & ((2**size) - 1)
 
 
@@ -26,14 +26,14 @@ def extractIntFromPosition(aInt, size, position):
 # tests were performed the assess the benefit of using functional methods
 # and the reduce and for loops gave similar times. Using a recursive function
 # was almost 10 times slower.
-def buildIntFromList(aList):
+def build_int_from_list(aList):
     return reduce(lambda x, y: (x << 8) + y, aList)
 
 
 ##
 # @brief uses list comprehension to deal with the input string
 # todo: implement the encoding type
-def stringToIntList(aString, encodingType):
+def string_to_int_list(aString, encoding_type):
     result = []
     [result.append(ord(i)) for i in aString]
     return result
@@ -42,61 +42,61 @@ def stringToIntList(aString, encodingType):
 ##
 # @brief uses the map, reduce pattern to deal with the input list functionally
 # todo: implement the encoding type
-def intListToString(aList, encodingType):
+def int_list_to_string(aList, encoding_type):
     return reduce(lambda x, y: x + y, list(map(chr, aList)))
 
 
-def intArrayToUInt8Array(aArray, inputType):
-    return intArrayToIntArray(aArray, inputType, "int8")
+def int_array_to_uint8_array(aArray, input_type):
+    return int_array_to_int_array(aArray, input_type, "int8")
 
 
-def intArrayToIntArray(aArray, inputType, outputType):
-    if inputType == "uint32":
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 24),
-            extractIntFromPosition(x, 8, 16),
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+def int_array_to_int_array(aArray, input_type, output_type):
+    if input_type == "uint32":
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 24),
+            extract_int_from_position(x, 8, 16),
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif inputType == "uint16":
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    elif input_type == "uint16":
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif inputType == "uint8":
-        inputFunc = lambda x: [x]
-    elif inputType == "int32":
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 24),
-            extractIntFromPosition(x, 8, 16),
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    elif input_type == "uint8":
+        input_func = lambda x: [x]
+    elif input_type == "int32":
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 24),
+            extract_int_from_position(x, 8, 16),
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif inputType == "int16":
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    elif input_type == "int16":
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif inputType == "int8":
-        inputFunc = lambda x: [x]
+    elif input_type == "int8":
+        input_func = lambda x: [x]
     else:
-        raise TypeError("inputType not currently supported")
+        raise TypeError("input_type not currently supported")
 
-    result = reduce(lambda x, y: x + y, list(map(inputFunc, aArray)))
+    result = reduce(lambda x, y: x + y, list(map(input_func, aArray)))
 
-    if outputType == "int8":
+    if output_type == "int8":
         return result
-    if outputType == "int32":
+    if output_type == "int32":
         size = 4
-        numberOfEntries = int(len(result) / size)
-    elif outputType == "int16":
+        number_of_entries = int(len(result) / size)
+    elif output_type == "int16":
         size = 2
-        numberOfEntries = int(len(result) / size)
+        number_of_entries = int(len(result) / size)
 
     output = list(
         map(
-            buildIntFromList,
-            [result[(i * size) : (i * size + size)] for i in range(numberOfEntries)],
+            build_int_from_list,
+            [result[(i * size) : (i * size + size)] for i in range(number_of_entries)],
         )
     )
     return output
@@ -104,88 +104,88 @@ def intArrayToIntArray(aArray, inputType, outputType):
 
 ##
 # @brief convert an data input of integer type to a list of bytes.
-def intValueToByteArray(intInput, bitLength):
-    if not isinstance(intInput, int):
-        return intInput
+def int_value_to_byte_array(int_input, bit_length):
+    if not isinstance(int_input, int):
+        return int_input
 
-    if bitLength <= 8:
-        inputFunc = lambda x: [x]
-    elif bitLength <= 16:
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    if bit_length <= 8:
+        input_func = lambda x: [x]
+    elif bit_length <= 16:
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif bitLength <= 24:
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 16),
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    elif bit_length <= 24:
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 16),
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
-    elif bitLength <= 32:
-        inputFunc = lambda x: [
-            extractIntFromPosition(x, 8, 24),
-            extractIntFromPosition(x, 8, 16),
-            extractIntFromPosition(x, 8, 8),
-            extractIntFromPosition(x, 8, 0),
+    elif bit_length <= 32:
+        input_func = lambda x: [
+            extract_int_from_position(x, 8, 24),
+            extract_int_from_position(x, 8, 16),
+            extract_int_from_position(x, 8, 8),
+            extract_int_from_position(x, 8, 0),
         ]
     else:
         raise TypeError("input length of integer type is too long!")
 
-    return inputFunc(intInput)
+    return input_func(int_input)
 
 
 if __name__ == "__main__":
-    a = intArrayToIntArray([0x5AA55AA5, 0xA55AA55A], "int32", "int32")
+    a = int_array_to_int_array([0x5AA55AA5, 0xA55AA55A], "int32", "int32")
     print(a)
     assert [0x5AA55AA5, 0xA55AA55A] == a
-    a = intArrayToIntArray([0x5AA55AA5, 0xA55AA55A], "int32", "int16")
+    a = int_array_to_int_array([0x5AA55AA5, 0xA55AA55A], "int32", "int16")
     print(a)
     assert [0x5AA5, 0x5AA5, 0xA55A, 0xA55A] == a
-    a = intArrayToIntArray([0x5AA55AA5, 0xA55AA55A], "int32", "int8")
+    a = int_array_to_int_array([0x5AA55AA5, 0xA55AA55A], "int32", "int8")
     print(a)
     assert [0x5A, 0xA5, 0x5A, 0xA5, 0xA5, 0x5A, 0xA5, 0x5A] == a
-    a = intArrayToIntArray([0x5AA5, 0xA55A], "int16", "int16")
+    a = int_array_to_int_array([0x5AA5, 0xA55A], "int16", "int16")
     print(a)
     assert [0x5AA5, 0xA55A] == a
-    a = intArrayToIntArray([0x5AA5, 0xA55A], "int16", "int32")
+    a = int_array_to_int_array([0x5AA5, 0xA55A], "int16", "int32")
     print(a)
     assert [0x5AA5A55A] == a
-    a = intArrayToIntArray([0x5AA5, 0xA55A], "int16", "int8")
+    a = int_array_to_int_array([0x5AA5, 0xA55A], "int16", "int8")
     print(a)
     assert [0x5A, 0xA5, 0xA5, 0x5A] == a
-    a = intArrayToIntArray([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int8")
+    a = int_array_to_int_array([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int8")
     print(a)
     assert [0x5A, 0xA5, 0xA5, 0x5A] == a
-    a = intArrayToIntArray([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int16")
+    a = int_array_to_int_array([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int16")
     print(a)
     assert [0x5AA5, 0xA55A] == a
-    a = intArrayToIntArray([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int32")
+    a = int_array_to_int_array([0x5A, 0xA5, 0xA5, 0x5A], "int8", "int32")
     print(a)
     assert [0x5AA5A55A] == a
-    a = intArrayToIntArray(
+    a = int_array_to_int_array(
         [0x5A, 0xA5, 0xA5, 0x5A, 0xA5, 0x5A, 0xA5, 0x5A], "int8", "int32"
     )
     print(a)
     assert [0x5AA5A55A, 0xA55AA55A] == a
 
-    a = intArrayToIntArray([0x01], "int8", "int8")
+    a = int_array_to_int_array([0x01], "int8", "int8")
     print(a)
 
-    a = intArrayToUInt8Array([0x01], "int8")
+    a = int_array_to_uint8_array([0x01], "int8")
     print(a)
 
-    a = intValueToByteArray([0x00, 0xB1], 16)
-    print(a)
-    assert [0x00, 0xB1] == a
-
-    a = intValueToByteArray([0x00, 0xB1], 32)
+    a = int_value_to_byte_array([0x00, 0xB1], 16)
     print(a)
     assert [0x00, 0xB1] == a
 
-    a = intValueToByteArray(0xB1, 16)
+    a = int_value_to_byte_array([0x00, 0xB1], 32)
     print(a)
     assert [0x00, 0xB1] == a
 
-    a = intValueToByteArray(0xB1, 32)
+    a = int_value_to_byte_array(0xB1, 16)
+    print(a)
+    assert [0x00, 0xB1] == a
+
+    a = int_value_to_byte_array(0xB1, 32)
     print(a)
     assert [0x00, 0x00, 0x00, 0xB1] == a

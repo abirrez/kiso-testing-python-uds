@@ -24,16 +24,16 @@ class TransferExitTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_transExitRequest(self, canTp_send, canTp_recv):
+    def test_trans_exit_request(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x77, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", "bootloader", transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transferExit to transferExit in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transfer_exit to transferExit in the uds object, so can now call below
 
         b = a.transferExit(
             [
@@ -53,7 +53,7 @@ class TransferExitTestCase(unittest.TestCase):
                 0xFE,
                 0xFF,
             ]
-        )  # ... calls __transferExit, which does the Uds.send - takes blockSequenceCounter and parameterRecord
+        )  # ... calls __transfer_exit, which does the Uds.send - takes block_sequence_counter and parameterRecord
         canTp_send.assert_called_with(
             [
                 0x37,
@@ -82,16 +82,16 @@ class TransferExitTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_transExitNegResponse_0x13(self, canTp_send, canTp_recv):
+    def test_trans_exit_neg_response_0x13(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x37, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", "bootloader", transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transferExit to transferExit in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transfer_exit to transferExit in the uds object, so can now call below
 
         try:
             b = a.transferExit(
@@ -112,7 +112,7 @@ class TransferExitTestCase(unittest.TestCase):
                     0xFE,
                     0xFF,
                 ]
-            )  # ... calls __transferExit, which does the Uds.send
+            )  # ... calls __transfer_exit, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -143,16 +143,16 @@ class TransferExitTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_transExitNegResponse_0x22(self, canTp_send, canTp_recv):
+    def test_trans_exit_neg_response_0x22(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x37, 0x22]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", "bootloader", transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transferExit to transferExit in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transfer_exit to transferExit in the uds object, so can now call below
 
         try:
             b = a.transferExit(
@@ -173,7 +173,7 @@ class TransferExitTestCase(unittest.TestCase):
                     0xFE,
                     0xFF,
                 ]
-            )  # ... calls __transferExit, which does the Uds.send
+            )  # ... calls __transfer_exit, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -204,16 +204,16 @@ class TransferExitTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_transExitNegResponse_0x24(self, canTp_send, canTp_recv):
+    def test_trans_exit_neg_response_0x24(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x37, 0x24]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", "bootloader", transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transferExit to transferExit in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __transfer_exit to transferExit in the uds object, so can now call below
 
         try:
             b = a.transferExit(
@@ -234,7 +234,7 @@ class TransferExitTestCase(unittest.TestCase):
                     0xFE,
                     0xFF,
                 ]
-            )  # ... calls __transferExit, which does the Uds.send
+            )  # ... calls __transfer_exit, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

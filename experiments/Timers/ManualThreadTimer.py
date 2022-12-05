@@ -7,7 +7,7 @@ from .iTimer import ITimer
 
 
 class ManualThreadTimer(ITimer):
-    def __init__(self, timeout=0):
+    def __init__(self, timeout = 0):
 
         self.__timeout = timeout
 
@@ -16,11 +16,11 @@ class ManualThreadTimer(ITimer):
 
         self.__thread = None
 
-        self.__startTime = 0
+        self.__start_time = 0
 
     def start(self):
-        self.__thread = Thread(target=self.threadFunc)
-        self.__startTime = perf_counter()
+        self.__thread = Thread(target = self.thread_func)
+        self.__start_time = perf_counter()
         self.__thread.start()
 
     def restart(self):
@@ -29,16 +29,16 @@ class ManualThreadTimer(ITimer):
     def stop(self):
         pass
 
-    def isExpired(self):
+    def is_expired(self):
         return self.__expired_flag
 
-    def isRunning(self):
+    def is_running(self):
         return self.__active_flag
 
-    def threadFunc(self):
+    def thread_func(self):
         self.__active_flag = True
         self.__expired_flag = False
-        while (perf_counter() - self.__startTime) < self.__timeout:
+        while (perf_counter() - self.__start_time) < self.__timeout:
             pass
         self.__expired_flag = True
         self.__active_flag = False
@@ -50,12 +50,12 @@ if __name__ == "__main__":
 
     results = []
     for i in range(0, 10000):
-        startTime = perf_counter()
+        start_time = perf_counter()
         a.start()
-        while a.isExpired() == False:
+        while a.is_expired() == False:
             pass
-        endTime = perf_counter()
-        delta = endTime - startTime
+        end_time = perf_counter()
+        delta = end_time - start_time
         results.append(delta)
 
     print("Min: {0}".format(min(results)))

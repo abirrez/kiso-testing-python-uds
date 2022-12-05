@@ -24,7 +24,7 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiSingleDIDAsciiResponse(self, tp_send, tp_recv):
+    def test_rdbi_singleDID_asciiesponse(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         # ECU Serial Number = "ABC0011223344556"   (16 bytes as specified in "_Bootloader_87")
@@ -52,13 +52,15 @@ class RDBITestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.readDataByIdentifier(
+        b = a.read_data_by_identifier(
             "ECU Serial Number"
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x22, 0xF1, 0x8C], False)
         self.assertEqual({"ECU Serial Number": "ABC0011223344556"}, b)
@@ -66,7 +68,7 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiSingleDIDMixedResponse(self, tp_send, tp_recv):
+    def test_rdbi_singleDID_mixed_response(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         # numberOfModules = 0x01   (1 bytes as specified in "_Bootloader_1")
@@ -104,13 +106,15 @@ class RDBITestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.readDataByIdentifier(
+        b = a.read_data_by_identifier(
             "Boot Software Identification"
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x22, 0xF1, 0x80], False)
         self.assertEqual(
@@ -124,7 +128,7 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiMultipleDIDMixedResponse(self, tp_send, tp_recv):
+    def test_rdbi_multipleDID_mixed_response(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x62, 0xF1, 0x8C, 0xF1, 0x80]
@@ -182,13 +186,15 @@ class RDBITestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.readDataByIdentifier(
+        b = a.read_data_by_identifier(
             ["ECU Serial Number", "Boot Software Identification"]
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x22, 0xF1, 0x8C, 0xF1, 0x80], False)
         self.assertEqual(
@@ -205,7 +211,7 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiMultipleDIDAlternativeOrdering(self, tp_send, tp_recv):
+    def test_rdbi_multipleDID_alternative_ordering(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x62, 0xF1, 0x80, 0xF1, 0x8C]
@@ -263,13 +269,15 @@ class RDBITestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.readDataByIdentifier(
+        b = a.read_data_by_identifier(
             ["Boot Software Identification", "ECU Serial Number"]
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x22, 0xF1, 0x80, 0xF1, 0x8C], False)
         self.assertEqual(
@@ -286,21 +294,23 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiNegResponse_0x13(self, tp_send, tp_recv):
+    def test_rdbi_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x22, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
-            b = a.readDataByIdentifier(
+            b = a.read_data_by_identifier(
                 "ECU Serial Number"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -311,21 +321,23 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiNegResponse_0x22(self, tp_send, tp_recv):
+    def test_rdbi_neg_response_0x22(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x22, 0x22]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
-            b = a.readDataByIdentifier(
+            b = a.read_data_by_identifier(
                 "ECU Serial Number"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -336,21 +348,23 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiNegResponse_0x31(self, tp_send, tp_recv):
+    def test_rdbi_neg_response_0x31(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x22, 0x31]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
-            b = a.readDataByIdentifier(
+            b = a.read_data_by_identifier(
                 "ECU Serial Number"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -361,21 +375,23 @@ class RDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_rdbiNegResponse_0x33(self, tp_send, tp_recv):
+    def test_rdbi_neg_response_0x33(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x22, 0x33]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
-            b = a.readDataByIdentifier(
+            b = a.read_data_by_identifier(
                 "ECU Serial Number"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

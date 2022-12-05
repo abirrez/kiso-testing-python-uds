@@ -24,18 +24,20 @@ class ECUResetTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetRequestDfltNoSuppress(self, tp_send, tp_recv):
+    def test_ecu_reset_requestDflt_no_suppress(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x51, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.ecuReset("Hard Reset")  # ... calls __ecuReset, which does the Uds.send
+        b = a.ecuReset("Hard Reset")  # ... calls __ecu_reset, which does the Uds.send
 
         tp_send.assert_called_with([0x11, 0x01], False)
         self.assertEqual({"Type": [0x01]}, b)  # ... wdbi should not return a value
@@ -43,20 +45,22 @@ class ECUResetTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetRequestNoSuppress(self, tp_send, tp_recv):
+    def test_ecu_reset_request_no_suppress(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x51, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.ecuReset(
-            "Hard Reset", suppressResponse=False
-        )  # ... calls __ecuReset, which does the Uds.send
+            "Hard Reset", suppress_response=False
+        )  # ... calls __ecu_reset, which does the Uds.send
 
         tp_send.assert_called_with([0x11, 0x01], False)
         self.assertEqual({"Type": [0x01]}, b)  # ... wdbi should not return a value
@@ -69,13 +73,15 @@ class ECUResetTestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.ecuReset(
-            "Hard Reset", suppressResponse=True
-        )  # ... calls __ecuReset, which does the Uds.send
+            "Hard Reset", suppress_response=True
+        )  # ... calls __ecu_reset, which does the Uds.send
 
         tp_send.assert_called_with([0x11, 0x81], False)
         self.assertEqual(None, b)  # ... wdbi should not return a value
@@ -83,21 +89,23 @@ class ECUResetTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x12(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x12(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x11, 0x12]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.ecuReset(
                 "Hard Reset"
-            )  # ... calls __ecuReset, which does the Uds.send
+            )  # ... calls __ecu_reset, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -108,21 +116,23 @@ class ECUResetTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x13(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x11, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.ecuReset(
                 "Hard Reset"
-            )  # ... calls __ecuReset, which does the Uds.send
+            )  # ... calls __ecu_reset, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -133,21 +143,23 @@ class ECUResetTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x22(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x22(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x11, 0x22]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "\.\./Functional Tests/Bootloader\.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.ecuReset(
                 "Hard Reset"
-            )  # ... calls __ecuReset, which does the Uds.send
+            )  # ... calls __ecu_reset, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

@@ -1,11 +1,11 @@
 from uds.uds_config_tool.UtilityFunctions import (
-    getLongName,
-    getParamWithSemantic,
-    getPositiveResponse,
-    getSdgsData,
-    getSdgsDataItem,
-    getServiceIdFromDiagService,
-    getShortName,
+    get_long_name,
+    get_param_with_semantic,
+    get_positive_response,
+    get_sdgs_data,
+    get_sdgs_data_item,
+    get_service_id_from_diag_service,
+    get_short_name,
 )
 
 if __name__ == "__main__":
@@ -15,38 +15,38 @@ if __name__ == "__main__":
 
     root = ET.parse(filename)
 
-    xmlElements = {}
+    xml_elements = {}
 
     for child in root.iter():
-        currTag = child.tag
+        curr_tag = child.tag
         try:
-            xmlElements[child.attrib["ID"]] = child
+            xml_elements[child.attrib["ID"]] = child
         except KeyError:
             pass
 
-    for key, value in xmlElements.items():
+    for key, value in xml_elements.items():
         if value.tag == "DIAG-SERVICE":
             print(value)
-            shortName = getShortName(value)
-            longName = getLongName(value)
-            sdgsParams = getSdgsData(value)
-            print("Short Name: {0}".format(shortName))
-            print("Long Name: {0}".format(longName))
-            for i, j in sdgsParams.items():
+            short_name = get_short_name(value)
+            long_name = get_long_name(value)
+            sdgs_params = get_sdgs_data(value)
+            print("Short Name: {0}".format(short_name))
+            print("Long Name: {0}".format(long_name))
+            for i, j in sdgs_params.items():
                 print("{0}: {1}".format(i, j))
             print(
                 "Service Id: {0:#x}".format(
-                    getServiceIdFromDiagService(value, xmlElements)
+                    get_service_id_from_diag_service(value, xml_elements)
                 )
             )
             print(
                 "DiagInstanceName: {0}".format(
-                    getSdgsDataItem(value, "DiagInstanceName")
+                    get_sdgs_data_item(value, "DiagInstanceName")
                 )
             )
-            requestElement = xmlElements[value.find("REQUEST-REF").attrib["ID-REF"]]
-            positiveResponses = getPositiveResponse(value, xmlElements)
-            print(positiveResponses)
+            request_element = xml_elements[value.find("REQUEST-REF").attrib["ID-REF"]]
+            positive_responses = get_positive_response(value, xml_elements)
+            print(positive_responses)
             print("")
 
     pass

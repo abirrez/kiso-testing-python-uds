@@ -24,20 +24,22 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiAsciiRequest(self, tp_send, tp_recv):
+    def test_wdbi_ascii_request(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x6E, 0xF1, 0x8C]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.writeDataByIdentifier(
             "ECU Serial Number", "ABC0011223344556"
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with(
             [
@@ -68,16 +70,18 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiMixedRequest(self, tp_send, tp_recv):
+    def test_wdbi_mixed_request(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x6E, 0xF1, 0x80]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.writeDataByIdentifier(
             "Boot Software Identification",
@@ -85,7 +89,7 @@ class WDBITestCase(unittest.TestCase):
                 ("Boot Software Identification", "SwId12345678901234567890"),
                 ("numberOfModules", [0x01]),
             ],
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with(
             [
@@ -125,16 +129,18 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiMixedRequestReverseOrder(self, tp_send, tp_recv):
+    def test_wdbi_mixed_request_reverse_order(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x6E, 0xF1, 0x80]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.writeDataByIdentifier(
             "Boot Software Identification",
@@ -142,7 +148,7 @@ class WDBITestCase(unittest.TestCase):
                 ("numberOfModules", [0x01]),
                 ("Boot Software Identification", "SwId12345678901234567890"),
             ],
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with(
             [
@@ -182,21 +188,23 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x13(self, tp_send, tp_recv):
+    def test_wdbi_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x2E, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.writeDataByIdentifier(
                 "ECU Serial Number", "ABC0011223344556"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -230,21 +238,23 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x22(self, tp_send, tp_recv):
+    def test_wdbi_neg_response_0x22(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x2E, 0x22]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.writeDataByIdentifier(
                 "ECU Serial Number", "ABC0011223344556"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -278,21 +288,23 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x31(self, tp_send, tp_recv):
+    def test_wdbi_neg_response_0x31(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x2E, 0x31]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.writeDataByIdentifier(
                 "ECU Serial Number", "ABC0011223344556"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -326,21 +338,23 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x33(self, tp_send, tp_recv):
+    def test_wdbi_neg_response_0x33(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x2E, 0x33]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.writeDataByIdentifier(
                 "ECU Serial Number", "ABC0011223344556"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -374,21 +388,23 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x72(self, tp_send, tp_recv):
+    def test_wdbi_neg_response_0x72(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x2E, 0x72]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader",
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.writeDataByIdentifier(
                 "ECU Serial Number", "ABC0011223344556"
-            )  # ... calls __readDataByIdentifier, which does the Uds.send
+            )  # ... calls __read_data_by_identifier, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

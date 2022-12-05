@@ -25,80 +25,88 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentRequestDfltNoSuppress(self, tp_send, tp_recv):
+    def test_tester_present_request_dflt_no_suppress(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         # tp_recv.return_value = [0x7E, 0x00]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __testerPresent to testerPresent in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __tester_present to tester_present in the uds object, so can now call below
 
-        b = a.testerPresent()  # ... calls __testerPresent, which does the Uds.send
+        b = a.tester_present()  # ... calls __tester_present, which does the Uds.send
 
         tp_send.assert_called_with([0x3E, 0x80], False)
-        self.assertEqual(None, b)  # ... testerPresent should not return a value
+        self.assertEqual(None, b)  # ... tester_present should not return a value
 
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentRequestNoSuppress(self, tp_send, tp_recv):
+    def test_tester_present_request_no_suppress(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7E, 0x00]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __testerPresent to testerPresent in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __tester_present to tester_present in the uds object, so can now call below
 
-        b = a.testerPresent(
-            suppressResponse=False
-        )  # ... calls __testerPresent, which does the Uds.send
+        b = a.tester_present(
+            suppress_response = False
+        )  # ... calls __tester_present, which does the Uds.send
 
         tp_send.assert_called_with([0x3E, 0x00], False)
-        self.assertEqual({}, b)  # ... testerPresent should not return a value
+        self.assertEqual({}, b)  # ... tester_present should not return a value
 
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentRequestSuppress(self, tp_send):
+    def test_tester_present_request_suppress(self, tp_send):
 
         tp_send.return_value = False
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __testerPresent to testerPresent in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __tester_present to tester_present in the uds object, so can now call below
 
-        b = a.testerPresent(
-            suppressResponse=True
-        )  # ... calls __testerPresent, which does the Uds.send
+        b = a.tester_present(
+            suppress_response = True
+        )  # ... calls __tester_present, which does the Uds.send
 
         tp_send.assert_called_with([0x3E, 0x80], False)
-        self.assertEqual(None, b)  # ... testerPresent should not return a value
+        self.assertEqual(None, b)  # ... tester_present should not return a value
 
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x12(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x12(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x3E, 0x12]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __testerPresent to testerPresent in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __tester_present to tester_present in the uds object, so can now call below
 
         try:
-            b = a.testerPresent(
-                suppressResponse=False
-            )  # ... calls __testerPresent, which does the Uds.send
+            b = a.tester_present(
+                suppress_response = False
+            )  # ... calls __tester_present, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -109,21 +117,23 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x13(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x3E, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __testerPresent to testerPresent in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __tester_present to tester_present in the uds object, so can now call below
 
         try:
-            b = a.testerPresent(
-                suppressResponse=False
-            )  # ... calls __testerPresent, which does the Uds.send
+            b = a.tester_present(
+                suppress_response = False
+            )  # ... calls __tester_present, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -134,7 +144,7 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentNotReqd(self, canTp_send, canTp_recv):
+    def test_tester_present_not_reqd(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [
@@ -148,13 +158,15 @@ class TesterPresentTestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __diagnosticSessionControl to diagnosticSessionControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __diagnostic_session_control to diagnosticSessionControl in the uds object, so can now call below
 
         b = a.diagnosticSessionControl(
             "Default Session"
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x01], False)
         self.assertEqual(
             {"Type": [0x01], "P3": [0x00, 0x05], "P3Ex": [0x00, 0x0A]}, b
@@ -167,7 +179,7 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentReqdDfltTO(self, canTp_send, canTp_recv):
+    def test_tester_present_reqd_dflt_TO(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [
@@ -181,13 +193,15 @@ class TesterPresentTestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __diagnosticSessionControl to diagnosticSessionControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __diagnostic_session_control to diagnosticSessionControl in the uds object, so can now call below
 
         b = a.diagnosticSessionControl(
-            "Default Session", testerPresent=True
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+            "Default Session", tester_present = True
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x01], False)
         self.assertEqual(
             {"Type": [0x01], "P3": [0x00, 0x05], "P3Ex": [0x00, 0x0A]}, b
@@ -200,7 +214,7 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentReqdUpdatedTO(self, canTp_send, canTp_recv):
+    def test_tester_present_reqd_updated_TO(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [
@@ -214,13 +228,15 @@ class TesterPresentTestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __diagnosticSessionControl to diagnosticSessionControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __diagnostic_session_control to diagnosticSessionControl in the uds object, so can now call below
 
         b = a.diagnosticSessionControl(
-            "Default Session", testerPresent=True, tpTimeout=250
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+            "Default Session", tester_present = True, tp_timeout = 250
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x01], False)
         self.assertEqual(
             {"Type": [0x01], "P3": [0x00, 0x05], "P3Ex": [0x00, 0x0A]}, b
@@ -233,15 +249,17 @@ class TesterPresentTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_testerPresentSessionSwitching(self, canTp_send, canTp_recv):
+    def test_tester_present_session_switching(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the testerPresent info and attaches the __diagnosticSessionControl to diagnosticSessionControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the tester_present info and attaches the __diagnostic_session_control to diagnosticSessionControl in the uds object, so can now call below
 
         # Confirm initial default session with no tester present handling ...
         canTp_recv.return_value = [
@@ -254,7 +272,7 @@ class TesterPresentTestCase(unittest.TestCase):
         ]  # ... can return 1 to N bytes in the sessionParameterRecord - looking into this one
         b = a.diagnosticSessionControl(
             "Default Session"
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x01], False)
         self.assertEqual(
             {"Type": [0x01], "P3": [0x00, 0x05], "P3Ex": [0x00, 0x0A]}, b
@@ -274,8 +292,8 @@ class TesterPresentTestCase(unittest.TestCase):
             0x09,
         ]  # ... can return 1 to N bytes in the sessionParameterRecord - looking into this one
         b = a.diagnosticSessionControl(
-            "Programming Session", testerPresent=True
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+            "Programming Session", tester_present=True
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x02], False)
         self.assertEqual(
             {"Type": [0x02], "P3": [0x00, 0x06], "P3Ex": [0x00, 0x09]}, b
@@ -294,11 +312,11 @@ class TesterPresentTestCase(unittest.TestCase):
         # print(("time since last send (1)",b))
         self.assertEqual((t1 >= 0 and t1 < 0.1), True)
         self.assertEqual((t2 >= 1 and t1 < 1.1), True)
-        # sleep(20.0)  # ... this was used for manual testing of "automated" testerPresent sending (required the above two asserts to be commented out, and the other tests as well as they add unwanted targets to the threads target list)
+        # sleep(20.0)  # ... this was used for manual testing of "automated" tester_present sending (required the above two asserts to be commented out, and the other tests as well as they add unwanted targets to the threads target list)
         # Note: the manual test for automated repeat sending worked ok.
 
         # Confirm that tester present disablling operates correctly ...
-        a.testerPresent(disable=True)
+        a.tester_present(disable=True)
         b = a.testerPresentSessionRecord()
         self.assertEqual(
             {"reqd": False, "timeout": None}, b
@@ -315,7 +333,7 @@ class TesterPresentTestCase(unittest.TestCase):
         ]  # ... can return 1 to N bytes in the sessionParameterRecord - looking into this one
         b = a.diagnosticSessionControl(
             "Default Session"
-        )  # ... calls __diagnosticSessionControl, which does the Uds.send
+        )  # ... calls __diagnostic_session_control, which does the Uds.send
         canTp_send.assert_called_with([0x10, 0x01], False)
         self.assertEqual(
             {"Type": [0x01], "P3": [0x00, 0x05], "P3Ex": [0x00, 0x0A]}, b

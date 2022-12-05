@@ -17,9 +17,9 @@ class ITimer(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def isExpired(self):
+    def is_expired(self):
         pass
 
     @abc.abstractmethod
-    def isRunning(self):
+    def is_running(self):
         pass

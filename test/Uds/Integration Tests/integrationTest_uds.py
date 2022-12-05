@@ -21,7 +21,7 @@ class UdsTestCase(unittest.TestCase):
     # these are inserted in reverse order to what you'd expect
     @mock.patch("uds.TestTp.send")
     @mock.patch("uds.TestTp.recv")
-    def test_udsSendWithResponse(self, tp_recv, tp_send):
+    def test_uds_send_with_response(self, tp_recv, tp_send):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x50, 0x01]

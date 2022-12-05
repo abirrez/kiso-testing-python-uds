@@ -17,18 +17,18 @@ from uds import CanTp
 
 if __name__ == "__main__":
 
-    sender = CanTp(reqId=0x600, resId=0x650)
+    sender = CanTp(reqId = 0x600, resId = 0x650)
 
     def receiverFunc():
 
-        receiver = CanTp(reqId=0x650, resId=0x600)
+        receiver = CanTp(reqId = 0x650, resId = 0x600)
 
         a = receiver.recv(100)
 
         # print(a)
         print(len(a))
 
-    receiverThread = Thread(target=receiverFunc)
+    receiverThread = Thread(target = receiverFunc)
 
     payload = []
     for i in range(1, 4095):

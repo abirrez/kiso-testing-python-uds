@@ -18,12 +18,12 @@ class iResettableTimer:
 
     @property
     @abstractmethod
-    def timeoutTime(self):
+    def timeout_time(self):
         raise NotImplementedError("class has not implemented this method")
 
-    @timeoutTime.setter
+    @timeout_time.setter
     @abstractmethod
-    def timeoutTime(self, val):
+    def timeout_time(self, val):
         raise NotImplementedError("class has not implemented this method")
 
     @abstractmethod
@@ -39,9 +39,9 @@ class iResettableTimer:
         raise NotImplementedError("class has not implemented this method")
 
     @abstractmethod
-    def isRunning(self):
+    def is_running(self):
         raise NotImplementedError("class has not implemented this method")
 
     @abstractmethod
-    def isExpired(self):
+    def is_expired(self):
         raise NotImplementedError("class has not implemented this method")

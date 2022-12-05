@@ -45,10 +45,10 @@ def callback_onReceive_singleFrame(msg):
     # print("Received Id: " + str(msg.arbitration_id))
     # print("Data: " + str(msg.data))
     response = [0x04, 0x62, 0xF1, 0x8C, 0x01, 0x00, 0x00, 0x00]
-    outMsg = can.Message()
-    outMsg.arbitration_id = 0x650
-    outMsg.data = response
-    bus1.send(outMsg)
+    out_msg = can.Message()
+    out_msg.arbitration_id = 0x650
+    out_msg.data = response
+    bus1.send(out_msg)
     time.sleep(1)
 
 
@@ -57,49 +57,49 @@ def callback_onReceive_multiFrameResponse_noBs(msg):
     # print("Received Id: " + str(msg.arbitration_id))
     # print("Data: " + str(msg.data))
     N_PCI = (msg.data[0] & 0xF0) >> 4
-    outMsg = can.Message()
-    outMsg.arbitration_id = 0x650
+    out_msg = can.Message()
+    out_msg.arbitration_id = 0x650
     if N_PCI == 0:
-        outMsg.data = [0x10, 19] + test2Response[0:6]
-        bus1.send(outMsg)
+        out_msg.data = [0x10, 19] + test2Response[0:6]
+        bus1.send(out_msg)
         time.sleep(0.01)
     if N_PCI == 3:
-        outMsg.data = [0x21] + test2Response[6:13]
-        bus1.send(outMsg)
+        out_msg.data = [0x21] + test2Response[6:13]
+        bus1.send(out_msg)
         time.sleep(0.01)
-        outMsg.data = [0x22] + test2Response[13:19] + [0]
-        bus1.send(outMsg)
+        out_msg.data = [0x22] + test2Response[13:19] + [0]
+        bus1.send(out_msg)
         time.sleep(0.01)
 
 
-startTime = 0
-lastTime = 0
+start_time = 0
+last_time = 0
 
 
 def callback_onReceive_multiFrameSend(msg):
-    global startTime, lastTime
-    startTime = time.time()
-    # print("Separation time: " + str(startTime - lastTime))
+    global start_time, last_time
+    start_time = time.time()
+    # print("Separation time: " + str(start_time - last_time))
     # print("Received Id: " + str(msg.arbitration_id))
     # print("Data: " + str(msg.data))
     response = msg.data
     N_PCI = (response[0] & 0xF0) >> 4
-    responsePayload = []
-    outMsg = can.Message()
-    outMsg.arbitration_id = 0x650
+    response_payload = []
+    out_msg = can.Message()
+    out_msg.arbitration_id = 0x650
     if N_PCI == 1:
         # print("First frame received, responding CTS")
-        responsePayload = [0x30, 5, 5, 00, 00, 00, 00, 00]
-        outMsg.data = responsePayload
-        bus1.send(outMsg)
+        response_payload = [0x30, 5, 5, 00, 00, 00, 00, 00]
+        out_msg.data = response_payload
+        bus1.send(out_msg)
     elif N_PCI == 2:
         # print("Consecutive frame received")
         if (msg.data[7] == 40) | (msg.data[7] == 110) | (msg.data[7] == 180):
             # print("End of block, sending CTS")
-            responsePayload = [0x30, 10, 10, 00, 00, 00, 00, 00]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
-    lastTime = startTime
+            response_payload = [0x30, 10, 10, 00, 00, 00, 00, 00]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
+    last_time = start_time
 
 
 def callback_onReceive_multiFrameWithWait(msg):
@@ -107,14 +107,14 @@ def callback_onReceive_multiFrameWithWait(msg):
     print("Data: " + str(unpack("BBBBBBBB", msg.data)))
     response = msg.data
     N_PCI = (response[0] & 0xF0) >> 4
-    responsePayload = []
-    outMsg = can.Message()
-    outMsg.arbitration_id = 0x650
+    response_payload = []
+    out_msg = can.Message()
+    out_msg.arbitration_id = 0x650
     if N_PCI == 1:
         # print("First frame received, responding CTS")
-        responsePayload = [0x30, 5, 20, 00, 00, 00, 00, 00]
-        outMsg.data = responsePayload
-        bus1.send(outMsg)
+        response_payload = [0x30, 5, 20, 00, 00, 00, 00, 00]
+        out_msg.data = response_payload
+        bus1.send(out_msg)
     elif N_PCI == 2:
         # print("Consecutive frame received")
         if (
@@ -124,37 +124,37 @@ def callback_onReceive_multiFrameWithWait(msg):
             | (msg.data[7] == 180)
         ):
             # print("End of block, sending CTS")
-            responsePayload = [0x30, 10, 10, 00, 00, 00, 00, 00]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x30, 10, 10, 00, 00, 00, 00, 00]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
         elif msg.data[7] == 110:
             # print("End of block, producing a Wait")
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x30, 10, 10, 00, 00, 00, 00, 00]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x30, 10, 10, 00, 00, 00, 00, 00]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
 
 
 def callback_onReceive_multiFrameWith4Wait(msg):
-    global startTime
-    global lastTime
-    startTime = time.time()
-    # print("Separation time: " + str(startTime-lastTime))
+    global start_time
+    global last_time
+    start_time = time.time()
+    # print("Separation time: " + str(start_time-last_time))
     # print("Received Id: " + str(msg.arbitration_id))
     # print("Data: " + str(msg.data))
     response = msg.data
     N_PCI = (response[0] & 0xF0) >> 4
-    responsePayload = []
-    outMsg = can.Message()
-    outMsg.arbitration_id = 0x650
+    response_payload = []
+    out_msg = can.Message()
+    out_msg.arbitration_id = 0x650
     if N_PCI == 1:
         # print("First frame received, responding CTS")
-        responsePayload = [0x30, 5, 5, 00, 00, 00, 00, 00]
-        outMsg.data = responsePayload
-        bus1.send(outMsg)
+        response_payload = [0x30, 5, 5, 00, 00, 00, 00, 00]
+        out_msg.data = response_payload
+        bus1.send(out_msg)
     elif N_PCI == 2:
 
         # print("Consecutive frame received")
@@ -165,35 +165,35 @@ def callback_onReceive_multiFrameWith4Wait(msg):
             | (msg.data[7] == 180)
         ):
             # print("End of block, sending CTS")
-            responsePayload = [0x30, 10, 127, 00, 00, 00, 00, 00]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x30, 10, 127, 00, 00, 00, 00, 00]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
         elif msg.data[7] == 110:
             # print("End of block, producing a Wait")
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x31, 0, 0, 0, 0, 0, 0, 0]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
+            response_payload = [0x31, 0, 0, 0, 0, 0, 0, 0]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
             time.sleep(0.7)
-            responsePayload = [0x30, 10, 127, 00, 00, 00, 00, 00]
-            outMsg.data = responsePayload
-            bus1.send(outMsg)
-    lastTime = startTime
+            response_payload = [0x30, 10, 127, 00, 00, 00, 00, 00]
+            out_msg.data = response_payload
+            bus1.send(out_msg)
+    last_time = start_time
 
 
 if __name__ == "__main__":
@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
     uds = Uds(reqId=0x600, resId=0x650, interface="virtual")
 
-    testEcu = createUdsConnection("Bootloader.odx", "bootloader", interface="virtual")
+    test_ecu = createUdsConnection("Bootloader.odx", "bootloader", interface="virtual")
 
     print("Test 1")
     listener.on_message_received = callback_onReceive_singleFrame
@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
     print("Test 2")
     listener.on_message_received = callback_onReceive_multiFrameResponse_noBs
-    a = testEcu.readDataByIdentifier("ECU Serial Number")
+    a = test_ecu.read_data_by_identifier("ECU Serial Number")
     print(a)
 
     time.sleep(1)
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     # for i in range(0, 200):
     #     payloadRequest.append(i)
     # udsMsg.request = payloadRequest
-    # udsMsg.responseRequired = False
+    # udsMsg.response_required = False
     # uds.send(udsMsg)
     # time.sleep(1)
 
@@ -235,7 +235,7 @@ if __name__ == "__main__":
     # for i in range(0, 200):
     #     payloadRequest.append(i)
     # udsMsg.request = payloadRequest
-    # udsMsg.responseRequired = False
+    # udsMsg.response_required = False
     # uds.send(udsMsg)
 
     # print("Test 5")
@@ -244,5 +244,5 @@ if __name__ == "__main__":
     # for i in range(0, 200):
     #     payloadRequest.append(i)
     # udsMsg.request = payloadRequest
-    # udsMsg.responseRequired = False
+    # udsMsg.response_required = False
     # uds.send(udsMsg)

@@ -16,23 +16,23 @@ from uds.uds_communications.Utilities.iResettableTimer import iResettableTimer
 
 
 class ResettableTimer(iResettableTimer):
-    def __init__(self, timeoutTime=0):
+    def __init__(self, timeout_time=0):
 
-        self.__timeoutTime = timeoutTime
+        self.__timeout_time = timeout_time
         self.__active_flag = False
         self.__expired_flag = False
-        self.__startTime = None
+        self.__start_time = None
 
     @property
-    def timeoutTime(self):
-        return self.__timeoutTime
+    def timeout_time(self):
+        return self.__timeout_time
 
-    @timeoutTime.setter
-    def timeoutTime(self, val):
-        self.__timeoutTime = val
+    @timeout_time.setter
+    def timeout_time(self, val):
+        self.__timeout_time = val
 
     def start(self):
-        self.__startTime = perf_counter()
+        self.__start_time = perf_counter()
         self.__active_flag = True
         self.__expired_flag = False
 
@@ -43,18 +43,18 @@ class ResettableTimer(iResettableTimer):
         self.__active_flag = False
         self.__expired_flag = False
 
-    def isRunning(self):
-        self.__timerCheck()
+    def is_running(self):
+        self.__timer_check()
         return self.__active_flag
 
-    def isExpired(self):
-        self.__timerCheck()
+    def is_expired(self):
+        self.__timer_check()
         return self.__expired_flag
 
-    def __timerCheck(self):
+    def __timer_check(self):
         if self.__active_flag:
-            currTime = perf_counter()
-            if (currTime - self.__startTime) > self.__timeoutTime:
+            curr_time = perf_counter()
+            if (curr_time - self.__start_time) > self.__timeout_time:
                 self.__expired_flag = True
                 self.__active_flag = False
 

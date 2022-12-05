@@ -33,98 +33,98 @@ def do_cprofile(func):
 
 
 # ----------------------------------------------------------------
-# buildIntFromList Tests
+# build_int_from_list Tests
 # ----------------------------------------------------------------
 
 
 @do_cprofile
-def buildIntFromListNonRecursiveFunc(aList):
-    def buildIntFromList(aList):
+def build_int_from_list_non_recursive_func(aList):
+    def build_int_from_list(aList):
         result = 0
         for i in range(0, len(aList)):
             result += aList[i] << (8 * (len(aList) - (i + 1)))
         return result
 
-    return buildIntFromList(aList)
+    return build_int_from_list(aList)
 
 
 @do_cprofile
-def buildIntFromListRecursiveFunc(aList):
-    def buildIntFromList(aList):
+def build_int_from_list_recursive_func(aList):
+    def build_int_from_list(aList):
         if len(aList) == 1:
             return aList[0]
         else:
-            return (aList[0] << (8 * (len(aList) - 1))) + buildIntFromList(aList[1:])
+            return (aList[0] << (8 * (len(aList) - 1))) + build_int_from_list(aList[1:])
 
-    return buildIntFromList(aList)
+    return build_int_from_list(aList)
 
 
 @do_cprofile
-def buildIntFromListReduceFunc(aList):
-    def buildIntFromList(aList):
+def build_int_from_list_reduce_func(aList):
+    def build_int_from_list(aList):
         return reduce(lambda x, y: (x << 8) + y, aList)
 
-    return buildIntFromList(aList)
+    return build_int_from_list(aList)
 
 
 # ----------------------------------------------------------------
-# byteListToString Tests
+# byte_list_to_string Tests
 # ----------------------------------------------------------------
 
 
 @do_cprofile
-def byteListToStringNonRecursiveFunc(aList):
-    def byteListToString(aList):
+def byte_list_to_string_non_recursive_func(aList):
+    def byte_list_to_string(aList):
         result = ""
         for i in aList:
             result += chr(i)
         return result
 
-    return byteListToString(aList)
+    return byte_list_to_string(aList)
 
 
 @do_cprofile
-def byteListToStringRecursiveFunc(aList):
-    def byteListToString(aList):
+def byte_list_to_string_recursive_func(aList):
+    def byte_list_to_string(aList):
         if len(aList) == 1:
             return chr(aList[0])
         else:
-            return chr(aList[0]) + byteListToString(aList[1:])
+            return chr(aList[0]) + byte_list_to_string(aList[1:])
 
-    return byteListToString(aList)
+    return byte_list_to_string(aList)
 
 
 @do_cprofile
-def byteListToStringReduceFunc(aList):
-    def byteListToString(aList):
+def byte_list_to_string_reduce_func(aList):
+    def byte_list_to_string(aList):
         return reduce(lambda x, y: x + y, list(map(chr, aList)))
 
-    return byteListToString(aList)
+    return byte_list_to_string(aList)
 
 
 if __name__ == "__main__":
 
     sys.setrecursionlimit(4000)
 
-    testListA = []
+    test_listA = []
     for i in range(0, 2500):
-        testListA.append(0x5A)
+        test_listA.append(0x5A)
 
-    testListB = []
+    test_listB = []
     for i in range(0, 2500):
-        testListB.append(0x30)
+        test_listB.append(0x30)
 
-    print("Testing the buildIntFromList methods")
-    resultA = buildIntFromListNonRecursiveFunc(testListA)
-    resultB = buildIntFromListRecursiveFunc(testListA)
-    resultC = buildIntFromListReduceFunc(testListA)
+    print("Testing the build_int_from_list methods")
+    resultA = build_int_from_list_non_recursive_func(test_listA)
+    resultB = build_int_from_list_recursive_func(test_listA)
+    resultC = build_int_from_list_reduce_func(test_listA)
 
     assert resultA == resultB == resultC
 
-    print("Testing the byteListToString methods")
-    resultA = byteListToStringNonRecursiveFunc(testListB)
-    resultB = byteListToStringRecursiveFunc(testListB)
-    resultC = byteListToStringReduceFunc(testListB)
+    print("Testing the byte_list_to_string methods")
+    resultA = byte_list_to_string_non_recursive_func(test_listB)
+    resultB = byte_list_to_string_recursive_func(test_listB)
+    resultC = byte_list_to_string_reduce_func(test_listB)
 
     assert resultA == resultB == resultC
     pass

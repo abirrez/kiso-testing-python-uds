@@ -16,7 +16,7 @@ from typing import Callable
 from uds.config import Config
 from uds.factories import TpFactory
 from uds.uds_config_tool.UdsConfigTool import UdsTool
-from uds.uds_config_tool.IHexFunctions import ihexFile as ihexFileParser
+from uds.uds_config_tool.IHexFunctions import ihex_file as ihexFileParser
 from uds.uds_config_tool.ISOStandard.ISOStandard import IsoDataFormatIdentifier
 
 ##
@@ -27,22 +27,22 @@ class Uds(object):
     # @brief a constructor
     # @param [in] reqId The request ID used by the UDS connection, defaults to None if not used
     # @param [in] resId The response Id used by the UDS connection, defaults to None if not used
-    def __init__(self, odx = None, ihexFile=None, **kwargs):
+    def __init__(self, odx = None, ihex_file = None, **kwargs):
 
-        self.__transportProtocol = Config.uds.transport_protocol
+        self.__transport_protocol = Config.uds.transport_protocol
         self.__P2_CAN_Client = Config.uds.p2_can_client
         self.__P2_CAN_Server = Config.uds.p2_can_server
 
-        self.tp = TpFactory.select_transport_protocol(self.__transportProtocol, **kwargs)
+        self.tp = TpFactory.select_transport_protocol(self.__transport_protocol, **kwargs)
 
         # used as a semaphore for the tester present
-        self.__transmissionActive_flag = False
+        self.__transmission_active_flag = False
 
-        # The above flag should prevent testerPresent operation, but in case of race conditions, this lock prevents actual overlapo in the sending
+        # The above flag should prevent tester_present operation, but in case of race conditions, this lock prevents actual overlapo in the sending
         self.sendLock = threading.Lock()
 
         # Process any ihex file that has been associated with the ecu at initialisation
-        self.__ihexFile = ihexFileParser(ihexFile) if ihexFile is not None else None
+        self.__ihexFile = ihexFileParser(ihex_file) if ihex_file is not None else None
         self.load_odx(odx)
 
     def load_odx(self, odx_file: Path)-> None:
@@ -68,46 +68,46 @@ class Uds(object):
         """override the TP reception method
 
         :param func: callable use to replace the current 
-            getNextBufferedMessage method
+            get_next_buffered_message method
         """
-        self.tp.getNextBufferedMessage = func
+        self.tp.get_next_buffered_message = func
 
     @property
-    def ihexFile(self):
+    def ihex_file(self):
         return self.__ihexFile
 
-    @ihexFile.setter
-    def ihexFile(self, value):
+    @ihex_file.setter
+    def ihex_file(self, value):
         if value is not None:
             self.__ihexFile = ihexFileParser(value)
 
     ##
-    # @brief Currently only called from transferFile to transfer ihex files
-    def transferIHexFile(self, transmitChunkSize=None, compressionMethod=None):
-        if transmitChunkSize is not None:
-            self.__ihexFile.transmitChunksize = transmitChunkSize
-        if compressionMethod is None:
-            compressionMethod = IsoDataFormatIdentifier.noCompressionMethod
+    # @brief Currently only called from transfer_file to transfer ihex files
+    def transfer_ihex_file(self, transmit_chunk_size = None, compression_method = None):
+        if transmit_chunk_size is not None:
+            self.__ihexFile.transmit_chunksize = transmit_chunk_size
+        if compression_method is None:
+            compression_method = IsoDataFormatIdentifier.NO_COMPRESSION_METHOD
         self.requestDownload(
-            [compressionMethod],
-            self.__ihexFile.transmitAddress,
-            self.__ihexFile.transmitLength,
+            [compression_method],
+            self.__ihexFile.transmit_address,
+            self.__ihexFile.transmit_length,
         )
-        self.transferData(transferBlocks=self.__ihexFile)
+        self.transfer_data(transfer_blocks=self.__ihexFile)
         return self.transferExit()
 
     ##
     # @brief This will eventually support more than one file type, but for now is limited to ihex only
-    def transferFile(
-        self, fileName=None, transmitChunkSize=None, compressionMethod=None
+    def transfer_file(
+        self, file_name = None, transmit_chunk_size = None, compression_method = None
     ):
-        if fileName is None and self.__ihexFile is None:
+        if file_name is None and self.__ihexFile is None:
             raise FileNotFoundError("file to transfer has not been specified")
 
         # Currently only ihex is recognised and supported
-        if fileName[-4:] == ".hex" or fileName[-5:] == ".ihex":
-            self.__ihexFile = ihexFileParser(fileName)
-            return self.transferIHexFile(transmitChunkSize, compressionMethod)
+        if file_name[-4:] == ".hex" or file_name[-5:] == ".ihex":
+            self.__ihexFile = ihexFileParser(file_name)
+            return self.transfer_ihex_file(transmit_chunk_size, compression_method)
         else:
             raise FileNotFoundError(
                 "file to transfer has not been recognised as a supported type ['.hex','.ihex']"
@@ -115,25 +115,25 @@ class Uds(object):
 
     ##
     # @brief
-    def send(self, msg, responseRequired=True, functionalReq=False, tpWaitTime=0.01):
+    def send(self, msg, response_required = True, functional_req = False, tpWaitTime = 0.01):
         # sets a current transmission in progress - tester present (if running) will not send if this flag is set to true
-        self.__transmissionActive_flag = True
-        # print(("__transmissionActive_flag set:",self.__transmissionActive_flag))
+        self.__transmission_active_flag = True
+        # print(("__transmission_active_flag set:",self.__transmission_active_flag))
 
         response = None
 
         # We're moving to threaded operation, so putting a lock around the send operation.
         self.sendLock.acquire()
         try:
-            a = self.tp.send(msg, functionalReq, tpWaitTime)
+            a = self.tp.send(msg, functional_req, tpWaitTime)
         finally:
             self.sendLock.release()
 
-        if functionalReq is True:
-            responseRequired = False
+        if functional_req is True:
+            response_required = False
 
         # Note: in automated mode (unlikely to be used any other way), there is no response from tester present, so threading is not an issue here.
-        if responseRequired:
+        if response_required:
             while True:
                 response = self.tp.recv(self.__P2_CAN_Client)
                 if not ((response[0] == 0x7F) and (response[2] == 0x78)):
@@ -146,12 +146,12 @@ class Uds(object):
             pass  # ... if the service isn't present, just ignore
 
         # Lets go of the hold on transmissions - allows test present to resume operation (if it's running)
-        self.__transmissionActive_flag = False
-        # print(("__transmissionActive_flag cleared:",self.__transmissionActive_flag))
+        self.__transmission_active_flag = False
+        # print(("__transmission_active_flag cleared:",self.__transmission_active_flag))
 
         return response
 
     ##
     # @brief
-    def isTransmitting(self):
-        return self.__transmissionActive_flag
+    def is_transmitting(self):
+        return self.__transmission_active_flag

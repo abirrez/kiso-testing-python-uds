@@ -5,7 +5,7 @@ from can import Bus, Listener, Notifier
 from uds import Uds
 
 
-def callback_onReceive(msg):
+def callback_on_receive(msg):
 
     if msg.arbitration_id == 0x600:
         print("Bootloader Receive:", list(msg.data))
@@ -15,15 +15,15 @@ def callback_onReceive(msg):
 
 if __name__ == "__main__":
 
-    recvBus = Bus("virtualInterface", bustype="virtual")
+    recv_bus = Bus("virtualInterface", bustype="virtual")
 
     listener = Listener()
-    notifier = Notifier(recvBus, [listener], 0)
+    notifier = Notifier(recv_bus, [listener], 0)
 
-    listener.on_message_received = callback_onReceive
+    listener.on_message_received = callback_on_receive
 
     a = Uds()
 
-    a.send([0x22, 0xF1, 0x8C], responseRequired=False)
+    a.send([0x22, 0xF1, 0x8C], response_required = False)
 
     sleep(2)

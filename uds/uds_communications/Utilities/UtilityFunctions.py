@@ -13,6 +13,6 @@ from typing import List, Sequence
 
 ##
 # @brief pads out an array with a fill value
-def fillArray(data: Sequence[int], length: int, fillValue: int = 0) -> List[int]:
+def fill_array(data: Sequence[int], length: int, fillValue: int = 0) -> List[int]:
     padded_data = list(data) + ([fillValue] * (length - len(data)))
     return padded_data

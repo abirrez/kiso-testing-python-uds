@@ -21,83 +21,83 @@ class IsoDidNames(Enum):
 
 class IsoServices(IntEnum):
 
-    DiagnosticSessionControl = 0x10
-    EcuReset = 0x11
-    SecurityAccess = 0x27
-    CommunicationControl = 0x28
-    TesterPresent = 0x3E
-    AccessTimingParameter = 0x83
-    SecuredDataTransmission = 0x84
-    ControlDTCSetting = 0x85
-    ResponseOnEvent = 0x86
-    LinkControl = 0x87
-    ReadDataByIdentifier = 0x22
-    ReadMemoryByAddress = 0x23
-    ReadScalingDataByIdentifier = 0x24
-    ReadDataByPeriodicIdentifier = 0x2A
-    DynamicallyDefineDataIdentifier = 0x2C
-    WriteDataByIdentifier = 0x2E
-    WriteMemoryByAddress = 0x3D
-    ClearDiagnosticInformation = 0x14
-    ReadDTCInformation = 0x19
-    InputOutputControlByIdentifier = 0x2F
-    RoutineControl = 0x31
-    RequestDownload = 0x34
-    RequestUpload = 0x35
-    TransferData = 0x36
-    RequestTransferExit = 0x37
+    DIAGNOSTIC_SESSION_CONTROL = 0x10
+    ECU_RESET = 0x11
+    SECURITY_ACCESS = 0x27
+    COMMUNICATION_CONTROL = 0x28
+    TESTER_PRESENT = 0x3E
+    ACCESS_TIMING_PARAMETER = 0x83
+    SECURED_DATA_TRANSMISSION = 0x84
+    CONTROL_DTC_SETTING = 0x85
+    RESPONSE_ON_EVENT = 0x86
+    LINK_CONTROL = 0x87
+    READ_DATA_BY_IDENTIFIER = 0x22
+    READ_MEMORY_BY_ADDRESS = 0x23
+    READ_SCALING_DATA_BY_IDENTIFIER = 0x24
+    READ_DATA_BY_PERIODIC_IDENTIFIER = 0x2A
+    DYNAMICALLY_DEFINE_DATA_IDENTIFIER = 0x2C
+    WRITE_DATA_BY_IDENTIFIER = 0x2E
+    WRITE_MEMORY_BY_ADDRESS = 0x3D
+    CLEAR_DIAGNOSTIC_INFORMATION = 0x14
+    READ_DTC_INFORMATION = 0x19
+    INPUT_OUTPUT_CONTROL_BY_IDENTIFIER = 0x2F
+    ROUTINE_CONTROL = 0x31
+    REQUEST_DOWNLOAD = 0x34
+    REQUEST_UPLOAD = 0x35
+    TRANSFER_DATA = 0x36
+    REQUEST_TRANSFER_EXIT = 0x37
 
 
 class IsoRoutineControlType(IntEnum):
 
-    startRoutine = 0x01
-    stopRoutine = 0x02
-    requestRoutineResults = 0x03
+    START_ROUTINE = 0x01
+    STOP_ROUTINE = 0x02
+    REQUEST_ROUTINE_RESULTS = 0x03
 
 
 class IsoInputOutputControlOptionRecord(IntEnum):
 
-    returnControl = 0x00
-    resetToDefault = 0x01
-    freezeCurrentState = 0x02
-    adjust = 0x03
+    RETURN_CONTROL = 0x00
+    RESET_TO_DEFAULT = 0x01
+    FREEZE_CURRENT_STATE = 0x02
+    ADJUST = 0x03
 
 
 class IsoReadDTCSubfunction(IntEnum):
 
-    reportNumberOfDTCByStatusMask = 0x01
-    reportDTCByStatusMask = 0x02
-    reportDTCSnapshotIdentification = 0x03
-    reportDTCSnapshotRecordByDTCNumber = 0x04
-    reportDTCSnapshotRecordByRecordNumber = 0x05
-    reportDTCExtendedDataRecordByDTCNumber = 0x06
-    reportNumberOfDTCBySeverityMaskRecord = 0x07
-    reportDTCBySeverityMaskRecord = 0x08
-    reportSeverityInformationOfDTC = 0x09
-    reportSupportedDTC = 0x0A
-    reportFirstTestFailedDTC = 0x0B
-    reportFirstConfirmedDTC = 0x0C
-    reportMostRecentTestFailedDTC = 0x0D
-    reportMostRecentConfirmedDTC = 0x0E
-    reportMirrorMemoryDTCByStatusMask = 0x0F
-    reportMirrorMemoryDTCExtendedDataRecordByDTCNumber = 0x10
-    reportNumberOfMirrorMemoryDTCByStatusMask = 0x11
-    reportNumberOfEmissionsRelatedOBDDTCByStatusMask = 0x12
-    reportEmissionsRelatedOBDDTCByStatusMask = 0x13
+    REPORT_NUMBER_OF_DTC_BY_STATUS_MASK = 0x01
+    REPORT_DTC_BY_STATUS_MASK = 0x02
+    REPORT_DTC_SNAPSHOT_IDENTIFICATION = 0x03
+    REPORT_DTC_SNAPSHOT_RECORD_BY_DTC_NUMBER = 0x04
+    REPORT_DTC_SNAPSHOT_RECORD_BY_RECORD_NUMBER = 0x05
+    REPORT_DTC_EXTENDED_DATA_RECORD_BY_DTC_NUMBER = 0x06
+    REPORT_NUMBER_OF_DTC_BY_SEVERITY_MASK_RECORD = 0x07
+    REPORT_DTC_BY_SEVERITY_MASK_RECORD = 0x08
+    REPORT_SEVERITY_INFORMATION_OF_DTC = 0x09
+    REPORT_SUPPORTED_DTC = 0x0A
+    REPORT_FIRST_TEST_FAILED_DTC = 0x0B
+    REPORT_FIRST_CONFIRMED_DTC = 0x0C
+    REPORT_MOST_RECENT_TEST_FAILED_DTC = 0x0D
+    REPORT_MOST_RECENT_CONFIRMED_DTC = 0x0E
+    REPORT_MIRROR_MEMORY_DTC_BY_STATUS_MASK = 0x0F
+    REPORT_MIRROR_MEMORY_DTC_EXTENDED_DATA_RECORD_BY_DTC_NUMBER = 0x10
+    REPORT_NUMBER_OF_MIRROR_MEMORY_DTC_BY_STATUS_MASK = 0x11
+    REPORT_NUMBER_OF_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK = 0x12
+    REPORT_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK = 0x13
 
 
 class IsoReadDTCStatusMask(IntEnum):
 
-    testFailed = 0x01
-    testFailedThisMonitoringCycle = 0x02  # ... reserved
-    pendingDtc = 0x04  # ... reserved
-    confirmedDtc = 0x08
-    testNotCompletedSinceLastClear = 0x10
-    testFailedSinceLastClear = 0x20
-    testNotCompletedThisMonitoringCycle = 0x40
-    warningIndicatorRequested = 0x80  # ... reserved
+    TEST_FAILED = 0x01
+    TEST_FAILED_THI_SMONITORING_CYCLE = 0x02  # ... reserved
+    PENDING_DTC = 0x04  # ... reserved
+    CONFIRMED_DTC = 0x08
+    TEST_NOT_COMPLETED_SINCE_LAST_CLEAR = 0x10
+    TEST_FAILED_SINCE_LAST_CLEAR = 0x20
+    TEST_NOT_COMPLETED_THIS_MONITORING_CYCLE = 0x40
+    WARNING_INDICATOR_REQUESTED = 0x80  # ... reserved
 
 
 class IsoDataFormatIdentifier(IntEnum):
 
-    noCompressionMethod = 0x00  # ... for use during request download - all other values are manufacturer specific
+    NO_COMPRESSION_METHOD = 0x00  # ... for use during request download - all other values are manufacturer specific

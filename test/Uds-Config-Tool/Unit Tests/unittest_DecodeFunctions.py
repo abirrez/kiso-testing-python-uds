@@ -16,103 +16,103 @@ from uds.uds_config_tool import DecodeFunctions
 
 
 class CanTpMessageTestCase(unittest.TestCase):
-    def testBitExtractFromBytePos0True(self):
-        testVal = 0x01
-        result = DecodeFunctions.extractBitFromPosition(testVal, 0)
+    def test_bit_extract_from_byte_pos0_true(self):
+        test_val = 0x01
+        result = DecodeFunctions.extract_bit_from_position(test_val, 0)
         self.assertEqual(True, result)
 
-    def testBitExtractFromBytePos0False(self):
-        testVal = 0x00
-        result = DecodeFunctions.extractBitFromPosition(testVal, 0)
+    def test_bit_extract_from_byte_pos0_False(self):
+        test_val = 0x00
+        result = DecodeFunctions.extract_bit_from_position(test_val, 0)
         self.assertEqual(False, result)
 
-    def testBitExtractFromBytePos1True(self):
-        testVal = 0x02
-        result = DecodeFunctions.extractBitFromPosition(testVal, 1)
+    def test_bit_extract_from_byte_pos1_true(self):
+        test_val = 0x02
+        result = DecodeFunctions.extract_bit_from_position(test_val, 1)
         self.assertEqual(True, result)
 
-    def testBitExtractFromBytePos1False(self):
-        testVal = 0x00
-        result = DecodeFunctions.extractBitFromPosition(testVal, 1)
+    def test_bit_extract_from_byte_pos1_False(self):
+        test_val = 0x00
+        result = DecodeFunctions.extract_bit_from_position(test_val, 1)
         self.assertEqual(False, result)
 
-    def testMultipleBitExtractFromByte(self):
-        testVal = 0x5A
-        result = DecodeFunctions.extractBitFromPosition(testVal, 0)
+    def test_multiple_bit_extract_from_byte(self):
+        test_val = 0x5A
+        result = DecodeFunctions.extract_bit_from_position(test_val, 0)
         self.assertEqual(False, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 1)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 1)
         self.assertEqual(True, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 2)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 2)
         self.assertEqual(False, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 3)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 3)
         self.assertEqual(True, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 4)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 4)
         self.assertEqual(True, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 5)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 5)
         self.assertEqual(False, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 6)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 6)
         self.assertEqual(True, result)
-        result = DecodeFunctions.extractBitFromPosition(testVal, 7)
-        self.assertEqual(False, result)
-
-    def testBitExtractFromWordPos8True(self):
-        testVal = 0x100
-        result = DecodeFunctions.extractBitFromPosition(testVal, 8)
-        self.assertEqual(True, result)
-
-    def testBitExtractFromWordPos8False(self):
-        testVal = 0x000
-        result = DecodeFunctions.extractBitFromPosition(testVal, 8)
+        result = DecodeFunctions.extract_bit_from_position(test_val, 7)
         self.assertEqual(False, result)
 
-    def test4BitIntExtractFromPos0Of8BitInt(self):
-        testVal = 0xA5
-        result = DecodeFunctions.extractIntFromPosition(testVal, 4, 0)
+    def test_bit_extract_from_byte_pos8_True(self):
+        test_val = 0x100
+        result = DecodeFunctions.extract_bit_from_position(test_val, 8)
+        self.assertEqual(True, result)
+
+    def test_bit_extract_from_byte_pos8_False(self):
+        test_val = 0x000
+        result = DecodeFunctions.extract_bit_from_position(test_val, 8)
+        self.assertEqual(False, result)
+
+    def test4_bit_int_extract_from_pos0_of8_bit_int(self):
+        test_val = 0xA5
+        result = DecodeFunctions.extract_int_from_position(test_val, 4, 0)
         self.assertEqual(0x05, result)
 
-    def test4BitIntExtractFromPos1Of8BitInt(self):
-        testVal = 0xA5
-        result = DecodeFunctions.extractIntFromPosition(testVal, 4, 1)
+    def test4_bit_int_extract_from_pos1_of8_bit_int(self):
+        test_val = 0xA5
+        result = DecodeFunctions.extract_int_from_position(test_val, 4, 1)
         self.assertEqual(0x2, result)
 
-    def test4BitIntExtractFromPos2Of8BitInt(self):
-        testVal = 0xA5
-        result = DecodeFunctions.extractIntFromPosition(testVal, 4, 2)
+    def test4_bit_int_extract_from_pos2_of8_bit_int(self):
+        test_val = 0xA5
+        result = DecodeFunctions.extract_int_from_position(test_val, 4, 2)
         self.assertEqual(0x9, result)
 
-    def test6BitIntExtractFromPos2Of8BitInt(self):
-        testVal = 0xA5
-        result = DecodeFunctions.extractIntFromPosition(testVal, 6, 2)
+    def test6_bit_int_extract_from_pos0_of8_bit_int(self):
+        test_val = 0xA5
+        result = DecodeFunctions.extract_int_from_position(test_val, 6, 2)
         self.assertEqual(0x29, result)
 
-    def testBuildIntFromArray1ByteArray(self):
-        testVal = [0x5A]
-        result = DecodeFunctions.buildIntFromList(testVal)
+    def test_build_int_from_array1_byte_array(self):
+        test_val = [0x5A]
+        result = DecodeFunctions.build_int_from_list(test_val)
         self.assertEqual(0x5A, result)
 
-    def testBuildIntFromArray2ByteArray(self):
-        testVal = [0x5A, 0xA5]
-        result = DecodeFunctions.buildIntFromList(testVal)
+    def test_build_int_from_array2_byte_array(self):
+        test_val = [0x5A, 0xA5]
+        result = DecodeFunctions.build_int_from_list(test_val)
         self.assertEqual(0x5AA5, result)
 
-    def testBuildIntFromArray3ByteArray(self):
-        testVal = [0x5A, 0xA5, 0x5A]
-        result = DecodeFunctions.buildIntFromList(testVal)
+    def test_build_int_from_array3_byte_array(self):
+        test_val = [0x5A, 0xA5, 0x5A]
+        result = DecodeFunctions.build_int_from_list(test_val)
         self.assertEqual(0x5AA55A, result)
 
-    def testBuildIntFromArray4ByteArray(self):
-        testVal = [0x5A, 0xA5, 0xA5, 0x5A]
-        result = DecodeFunctions.buildIntFromList(testVal)
+    def test_build_int_from_array4_byte_array(self):
+        test_val = [0x5A, 0xA5, 0xA5, 0x5A]
+        result = DecodeFunctions.build_int_from_list(test_val)
         self.assertEqual(0x5AA5A55A, result)
 
-    def testBuildIntFromArray8ByteArray(self):
-        testVal = [0x5A, 0xA5, 0xA5, 0x5A, 0x5A, 0xA5, 0xA5, 0x5A]
-        result = DecodeFunctions.buildIntFromList(testVal)
+    def test_build_int_from_array8_byte_array(self):
+        test_val = [0x5A, 0xA5, 0xA5, 0x5A, 0x5A, 0xA5, 0xA5, 0x5A]
+        result = DecodeFunctions.build_int_from_list(test_val)
         self.assertEqual(0x5AA5A55A5AA5A55A, result)
 
-    def testStringToByteArrayAlphaOnlyAscii(self):
-        testVal = "abcdefghijklmn"
-        result = DecodeFunctions.stringToIntList(testVal, "ascii")
+    def test_string_to_byte_array_alpha_only_ascii(self):
+        test_val = "abcdefghijklmn"
+        result = DecodeFunctions.string_to_int_list(test_val, "ascii")
         self.assertEqual(
             [
                 0x61,
@@ -133,21 +133,21 @@ class CanTpMessageTestCase(unittest.TestCase):
             result,
         )
 
-    def testStringToByteArrayNumericOnlyAscii(self):
-        testVal = "abcdefg01234"
-        result = DecodeFunctions.stringToIntList(testVal, "ascii")
+    def test_string_to_byte_array_numeric_only_ascii(self):
+        test_val = "abcdefg01234"
+        result = DecodeFunctions.string_to_int_list(test_val, "ascii")
         self.assertEqual(
             [0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x30, 0x31, 0x32, 0x33, 0x34],
             result,
         )
 
-    def testStringToByteArrayAlphaOnlyUtf8(self):
-        testVal = "abcdefg"
-        result = DecodeFunctions.stringToIntList(testVal, "utf-8")
+    def test_string_to_byte_array_alpha_only_utf8(self):
+        test_val = "abcdefg"
+        result = DecodeFunctions.string_to_int_list(test_val, "utf-8")
         self.assertEqual([0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67], result)
 
-    def testByteArrayToStringAlphaOnlyAscii(self):
-        testVal = [
+    def test_byte_array_to_string_alpha_only_ascii(self):
+        test_val = [
             0x61,
             0x62,
             0x63,
@@ -163,17 +163,17 @@ class CanTpMessageTestCase(unittest.TestCase):
             0x6D,
             0x6E,
         ]
-        result = DecodeFunctions.intListToString(testVal, "ascii")
+        result = DecodeFunctions.int_list_to_string(test_val, "ascii")
         self.assertEqual("abcdefghijklmn", result)
 
-    def testUint16ArrayToUint8Array(self):
-        testVal = [0x5AA5, 0xA55A]
-        result = DecodeFunctions.intArrayToUInt8Array(testVal, "int16")
+    def test_uint16_array_to_uint8_array(self):
+        test_val = [0x5AA5, 0xA55A]
+        result = DecodeFunctions.int_array_to_uint8_array(test_val, "int16")
         self.assertEqual([0x5A, 0xA5, 0xA5, 0x5A], result)
 
-    def testUint8ArraytoUint16Array(self):
-        testVal = [0x5AA55AA5, 0xA55AA55A]
-        result = DecodeFunctions.intArrayToUInt8Array(testVal, "int32")
+    def test_uint8_array_to_uint16_array(self):
+        test_val = [0x5AA55AA5, 0xA55AA55A]
+        result = DecodeFunctions.int_array_to_uint8_array(test_val, "int32")
         self.assertEqual([0x5A, 0xA5, 0x5A, 0xA5, 0xA5, 0x5A, 0xA5, 0x5A], result)
 
 

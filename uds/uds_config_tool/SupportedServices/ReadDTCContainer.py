@@ -20,37 +20,37 @@ class ReadDTCContainer(object):
     __metaclass__ = iContainer
 
     def __init__(self):
-        self.requestFunctions = {}
-        self.checkFunctions = {}
-        self.negativeResponseFunctions = {}
-        self.positiveResponseFunctions = {}
+        self.request_functions = {}
+        self.check_functions = {}
+        self.negative_response_functions = {}
+        self.positive_response_functions = {}
 
     ##
     # @brief this method is bound to an external Uds object, referenced by target, so that it can be called
     # as one of the in-built methods. uds.readDTC("something") It does not operate
     # on this instance of the container class.
     @staticmethod
-    def __readDTC(
+    def __read_dtc(
         target,
         subfunction,
-        DTCStatusMask=None,
-        DTCMaskRecord=None,
-        DTCSnapshotRecordNumber=None,
-        DTCExtendedRecordNumber=None,
-        DTCSeverityMask=None,
+        DTC_status_mask=None,
+        DTC_mask_record=None,
+        DTC_snapshot_record_number=None,
+        DTC_extended_record_number=None,
+        DTC_severity_mask=None,
         **kwargs
     ):
         # Note: readDTC does not show support for DIDs or multiple subfunctions in the spec, so this is handling only a single subfunction with data record.
-        requestFunction = target.readDTCContainer.requestFunctions[
+        request_function = target.readDTCContainer.request_functions[
             "FaultMemoryRead[{0}]".format(subfunction)
         ]
-        checkFunction = target.readDTCContainer.checkFunctions[
+        check_function = target.readDTCContainer.check_functions[
             "FaultMemoryRead[{0}]".format(subfunction)
         ]
-        negativeResponseFunction = target.readDTCContainer.negativeResponseFunctions[
+        negative_response_function = target.readDTCContainer.negative_response_functions[
             "FaultMemoryRead[{0}]".format(subfunction)
         ]
-        positiveResponseFunction = target.readDTCContainer.positiveResponseFunctions[
+        positive_response_function = target.readDTCContainer.positive_response_functions[
             "FaultMemoryRead[{0}]".format(subfunction)
         ]
 
@@ -58,48 +58,48 @@ class ReadDTCContainer(object):
         # ==============================================================================
 
         # Create the request ...
-        DTCStatusMask = [DTCStatusMask] if DTCStatusMask is not None else []
-        DTCMaskRecord = DTCMaskRecord if DTCMaskRecord is not None else []
-        DTCSnapshotRecordNumber = (
-            [DTCSnapshotRecordNumber] if DTCSnapshotRecordNumber is not None else []
+        DTC_status_mask = [DTC_status_mask] if DTC_status_mask is not None else []
+        DTC_mask_record = DTC_mask_record if DTC_mask_record is not None else []
+        DTC_snapshot_record_number = (
+            [DTC_snapshot_record_number] if DTC_snapshot_record_number is not None else []
         )
-        DTCExtendedRecordNumber = (
-            [DTCExtendedRecordNumber] if DTCExtendedRecordNumber is not None else []
+        DTC_extended_record_number = (
+            [DTC_extended_record_number] if DTC_extended_record_number is not None else []
         )
-        DTCSeverityMask = [DTCSeverityMask] if DTCSeverityMask is not None else []
-        request = requestFunction(
-            DTCStatusMask=DTCStatusMask,
-            DTCMaskRecord=DTCMaskRecord,
-            DTCSnapshotRecordNumber=[],
-            DTCExtendedRecordNumber=[],
-            DTCSeverityMask=[],
+        DTC_severity_mask = [DTC_severity_mask] if DTC_severity_mask is not None else []
+        request = request_function(
+            DTC_status_mask=DTC_status_mask,
+            DTC_mask_record=DTC_mask_record,
+            DTC_snapshot_record_number=[],
+            DTC_extended_record_number=[],
+            DTC_severity_mask=[],
         )
 
         # Send request and receive the response ...
         response = target.send(request)  # ... this returns a single response
-        nrc = negativeResponseFunction(
+        nrc = negative_response_function(
             response
         )  # ... return nrc value if a negative response is received
         if nrc:
             return nrc
 
         # We have a positive response so check that it makes sense to us ...
-        checkFunction(response)
+        check_function(response)
 
         # All is still good, so return the response (currently this function does nothing, but including it here as a hook in case that changes) ...
-        return positiveResponseFunction(response)
+        return positive_response_function(response)
 
-    def bind_function(self, bindObject):
-        bindObject.readDTC = MethodType(self.__readDTC, bindObject)
+    def bind_function(self, bind_object):
+        bind_object.readDTC = MethodType(self.__read_dtc, bind_object)
 
-    def add_requestFunction(self, aFunction, dictionaryEntry):
-        self.requestFunctions[dictionaryEntry] = aFunction
+    def add_request_function(self, aFunction, dictionary_entry):
+        self.request_functions[dictionary_entry] = aFunction
 
-    def add_checkFunction(self, aFunction, dictionaryEntry):
-        self.checkFunctions[dictionaryEntry] = aFunction
+    def add_check_function(self, aFunction, dictionary_entry):
+        self.check_functions[dictionary_entry] = aFunction
 
-    def add_negativeResponseFunction(self, aFunction, dictionaryEntry):
-        self.negativeResponseFunctions[dictionaryEntry] = aFunction
+    def add_negative_response_function(self, aFunction, dictionary_entry):
+        self.negative_response_functions[dictionary_entry] = aFunction
 
-    def add_positiveResponseFunction(self, aFunction, dictionaryEntry):
-        self.positiveResponseFunctions[dictionaryEntry] = aFunction
+    def add_positive_response_function(self, aFunction, dictionary_entry):
+        self.positive_response_functions[dictionary_entry] = aFunction

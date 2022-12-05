@@ -28,25 +28,25 @@ class ReadDTCTestCase(unittest.TestCase):
     """
         Example calls (the tests only include options present in the ODX test file):
 
-    a.readDTC(IsoReadDTCSubfunction.reportNumberOfDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCSnapshotIdentification, DTCMaskRecord=[0xF1, 0xC8, 0x55], DTCSnapshotRecordNumber=0x34)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCSnapshotRecordByDTCNumber, DTCMaskRecord=[0xF1, 0xC8, 0x55], DTCSnapshotRecordNumber=0x34)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCSnapshotRecordByRecordNumber, DTCSnapshotRecordNumber=0x34)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCExtendedDataRecordByDTCNumber, DTCMaskRecord=[0xF1, 0xC8, 0x55], DTCExtendedRecordNumber=0x12)
-    a.readDTC(IsoReadDTCSubfunction.reportNumberOfDTCBySeverityMaskRecord, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)
-    a.readDTC(IsoReadDTCSubfunction.reportDTCBySeverityMaskRecord, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)
-    a.readDTC(IsoReadDTCSubfunction.reportSeverityInformationOfDTC, DTCMaskRecord=[0xF1, 0xC8, 0x55])
-    a.readDTC(IsoReadDTCSubfunction.reportSupportedDTC)
-    a.readDTC(IsoReadDTCSubfunction.reportFirstTestFailedDTC)
-    a.readDTC(IsoReadDTCSubfunction.reportFirstConfirmedDTC)
-    a.readDTC(IsoReadDTCSubfunction.reportMostRecentTestFailedDTC)
-    a.readDTC(IsoReadDTCSubfunction.reportMostRecentConfirmedDTC)
-    a.readDTC(IsoReadDTCSubfunction.reportMirrorMemoryDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
-    a.readDTC(IsoReadDTCSubfunction.reportMirrorMemoryDTCExtendedDataRecordByDTCNumber, DTCMaskRecord=[0xF1, 0xC8, 0x55], DTCExtendedRecordNumber=0x12)
-    a.readDTC(IsoReadDTCSubfunction.reportNumberOfMirrorMemoryDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
-    a.readDTC(IsoReadDTCSubfunction.reportNumberOfEmissionsRelatedOBDDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
-    a.readDTC(IsoReadDTCSubfunction.reportEmissionsRelatedOBDDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.reportNumberOfDTCByStatusMask, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_SNAPSHOT_IDENTIFICATION, DTC_mask_record=[0xF1, 0xC8, 0x55], DTC_snapshot_record_number=0x34)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_SNAPSHOT_RECORD_BY_DTC_NUMBER, DTC_mask_record=[0xF1, 0xC8, 0x55], DTC_snapshot_record_number=0x34)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_SNAPSHOT_RECORD_BY_RECORD_NUMBER, DTC_snapshot_record_number=0x34)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_EXTENDED_DATA_RECORD_BY_DTC_NUMBER, DTC_mask_record=[0xF1, 0xC8, 0x55], DTC_extended_record_number=0x12)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_DTC_BY_SEVERITY_MASK_RECORD, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_BY_SEVERITY_MASK_RECORD, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_SEVERITY_INFORMATION_OF_DTC, DTC_mask_record=[0xF1, 0xC8, 0x55])
+    a.readDTC(IsoReadDTCSubfunction.REPORT_SUPPORTED_DTC)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_FIRST_TEST_FAILED_DTC)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_FIRST_CONFIRMED_DTC)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_MOST_RECENT_TEST_FAILED_DTC)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_MOST_RECENT_CONFIRMED_DTC)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_MIRROR_MEMORY_DTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_MIRROR_MEMORY_DTC_EXTENDED_DATA_RECORD_BY_DTC_NUMBER, DTC_mask_record=[0xF1, 0xC8, 0x55], DTC_extended_record_number=0x12)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_MIRROR_MEMORY_DTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
+    a.readDTC(IsoReadDTCSubfunction.REPORT_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)
 
     """
 
@@ -63,7 +63,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTC_reportDTCByStatusMask(self, tp_send, tp_recv):
+    def test_readDTC_reportDTC_by_status_mask(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [
@@ -88,14 +88,14 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.readDTC(
-            IsoReadDTCSubfunction.reportDTCByStatusMask,
-            DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+            IsoReadDTCSubfunction.REPORT_DTC_BY_STATUS_MASK,
+            DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x19, 0x02, 0x28], False)
         self.assertEqual(
@@ -113,7 +113,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTC_reportSupportedDTC(self, tp_send, tp_recv):
+    def test_readDTC_report_supportedDTC(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [
@@ -138,13 +138,13 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.readDTC(
-            IsoReadDTCSubfunction.reportSupportedDTC
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+            IsoReadDTCSubfunction.REPORT_SUPPORTED_DTC
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
         tp_send.assert_called_with([0x19, 0x0A], False)
         self.assertEqual(
             {
@@ -171,11 +171,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x0B, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportFirstTestFailedDTC)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_FIRST_TEST_FAILED_DTC)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x0B],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -194,11 +194,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x0C, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportFirstConfirmedDTC)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_FIRST_CONFIRMED_DTC)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x0C],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -217,11 +217,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x0D, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportMostRecentTestFailedDTC)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_MOST_RECENT_TEST_FAILED_DTC)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x0D],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -240,11 +240,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x0E, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportMostRecentConfirmedDTC)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_MOST_RECENT_CONFIRMED_DTC)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x0E],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -263,10 +263,10 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x0F, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportMirrorMemoryDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_MIRROR_MEMORY_DTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x0F, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -285,11 +285,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x13, 0x28, 0xF1, 0xC8, 0x55, 0x01, 0xF1, 0xD0, 0x56, 0x01, 0xF1, 0xD8, 0x57, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportEmissionsRelatedOBDDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x13, 0xF1, 0xC8, 0x55, 0x12],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCAndStatusRecord':[{'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]},{'DTC':[0xF1, 0xD8, 0x57],'statusOfDTC':[0x01]}]}, b)
@@ -298,7 +298,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTC_reportNumberOfDTCByStatusMask(self, tp_send, tp_recv):
+    def test_readDTC_report_number_of_DTC_by_status_mask(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x59, 0x01, 0x28, 0x00, 0x00, 0x03]
@@ -307,14 +307,14 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         b = a.readDTC(
-            IsoReadDTCSubfunction.reportNumberOfDTCByStatusMask,
-            DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
-        )  # ... calls __readDataByIdentifier, which does the Uds.send
+            IsoReadDTCSubfunction.REPORT_NUMBER_OF_DTC_BY_STATUS_MASK,
+            DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
+        )  # ... calls __read_data_by_identifier, which does the Uds.send
 
         tp_send.assert_called_with([0x19, 0x01, 0x28], False)
         self.assertEqual(
@@ -339,11 +339,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x07, 0x28, 0x00, 0x00, 0x03]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportNumberOfDTCBySeverityMaskRecord, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_DTC_BY_SEVERITY_MASK_RECORD, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x07, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCFormatIdentifier':[0x00],'DTCCount':[3]}, b)
@@ -362,11 +362,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x11, 0x28, 0x00, 0x00, 0x03]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportNumberOfMirrorMemoryDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_MIRROR_MEMORY_DTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x11, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCFormatIdentifier':[0x00],'DTCCount':[3]}, b)
@@ -385,11 +385,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x12, 0x28, 0x00, 0x00, 0x03]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportNumberOfEmissionsRelatedOBDDTCByStatusMask, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_NUMBER_OF_EMISSIONS_RELATED_OBDDTC_BY_STATUS_MASK, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x12, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x28],'DTCFormatIdentifier':[0x00],'DTCCount':[3]}, b)
@@ -408,11 +408,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x08, 0x08, 0x08, 0x01, 0xF1, 0xC8, 0x55, 0x01, 0x08, 0x02, 0xF1, 0xD0, 0x56, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportDTCBySeverityMaskRecord, DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_DTC_BY_SEVERITY_MASK_RECORD, DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear, DTCSeverityMaskRecord=Mask.confirmedDtc)	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x08, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x08],'DTCAndSeverityRecord':[{'DTCSeverity':[0x08],'DTCFunctionalUnit':[0x01],'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]},{'DTCSeverity':[0x08],'DTCFunctionalUnit':[0x02],'DTC':[0xF1, 0xD0, 0x56],'statusOfDTC':[0x01]}]}, b)
@@ -431,11 +431,11 @@ class ReadDTCTestCase(unittest.TestCase):
         tp_recv.return_value = [0x59, 0x09, 0x08, 0x08, 0x01, 0xF1, 0xC8, 0x55, 0x01]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
-        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transportProtocol="TEST")
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        a = createUdsConnection('../Functional Tests/EBC-Diagnostics_old.odx', 'bootloader', transport_protocol="TEST")
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
 
-        b = a.readDTC(IsoReadDTCSubfunction.reportSeverityInformationOfDTC, DTCMaskRecord=[0xF1, 0xC8, 0x55])	# ... calls __readDataByIdentifier, which does the Uds.send
+        b = a.readDTC(IsoReadDTCSubfunction.REPORT_SEVERITY_INFORMATION_OF_DTC, DTC_mask_record=[0xF1, 0xC8, 0x55])	# ... calls __read_data_by_identifier, which does the Uds.send
 	
         tp_send.assert_called_with([0x19, 0x09, 0x28],False)
         self.assertEqual({'DTCStatusAvailabilityMask':[0x08],'DTCAndSeverityRecord':[{'DTCSeverity':[0x08],'DTCFunctionalUnit':[0x01],'DTC':[0xF1, 0xC8, 0x55],'statusOfDTC':[0x01]}]}, b)
@@ -444,7 +444,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTCNegResponse_0x12(self, tp_send, tp_recv):
+    def test_readDTC_neg_response_0x12(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x19, 0x12]
@@ -453,15 +453,15 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDTC to readDTC in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_dtc to readDTC in the uds object, so can now call below
 
         try:
             b = a.readDTC(
-                IsoReadDTCSubfunction.reportDTCByStatusMask,
-                DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
-            )  # ... calls __readDTC, which does the Uds.send
+                IsoReadDTCSubfunction.REPORT_DTC_BY_STATUS_MASK,
+                DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
+            )  # ... calls __read_dtc, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -472,7 +472,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTCNegResponse_0x13(self, tp_send, tp_recv):
+    def test_readDTC_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x19, 0x13]
@@ -481,15 +481,15 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDTC to readDTC in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_dtc to readDTC in the uds object, so can now call below
 
         try:
             b = a.readDTC(
-                IsoReadDTCSubfunction.reportDTCByStatusMask,
-                DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
-            )  # ... calls __readDTC, which does the Uds.send
+                IsoReadDTCSubfunction.REPORT_DTC_BY_STATUS_MASK,
+                DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
+            )  # ... calls __read_dtc, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -500,7 +500,7 @@ class ReadDTCTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_readDTCNegResponse_0x31(self, tp_send, tp_recv):
+    def test_readDTC_neg_response_0x31(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x19, 0x31]
@@ -509,15 +509,15 @@ class ReadDTCTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDTC to readDTC in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_dtc to readDTC in the uds object, so can now call below
 
         try:
             b = a.readDTC(
-                IsoReadDTCSubfunction.reportDTCByStatusMask,
-                DTCStatusMask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
-            )  # ... calls __readDTC, which does the Uds.send
+                IsoReadDTCSubfunction.REPORT_DTC_BY_STATUS_MASK,
+                DTC_status_mask=Mask.confirmedDtc + Mask.testFailedSinceLastClear,
+            )  # ... calls __read_dtc, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

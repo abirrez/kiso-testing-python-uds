@@ -20,83 +20,83 @@ class ECUResetContainer(object):
     __metaclass__ = iContainer
 
     def __init__(self):
-        self.requestFunctions = {}
-        self.checkFunctions = {}
-        self.negativeResponseFunctions = {}
-        self.positiveResponseFunctions = {}
+        self.request_functions = {}
+        self.check_functions = {}
+        self.negative_response_functions = {}
+        self.positive_response_functions = {}
 
     ##
     # @brief this method is bound to an external Uds object, referenced by target, so that it can be called
     # as one of the in-built methods. uds.ecuReset("something","something else") It does not operate
     # on this instance of the container class.
     @staticmethod
-    def __ecuReset(target, parameter, suppressResponse=False, **kwargs):
+    def __ecu_reset(target, parameter, suppress_response=False, **kwargs):
 
         # Note: ecuReset does not show support for multiple DIDs in the spec, so this is handling only a single DID with data record.
-        requestFunction = target.ecuResetContainer.requestFunctions[parameter]
-        if parameter in target.ecuResetContainer.checkFunctions:
-            checkFunction = target.ecuResetContainer.checkFunctions[parameter]
+        request_function = target.ecuResetContainer.request_functions[parameter]
+        if parameter in target.ecuResetContainer.check_functions:
+            check_function = target.ecuResetContainer.check_functions[parameter]
         else:
-            checkFunction = None
-        negativeResponseFunction = target.ecuResetContainer.negativeResponseFunctions[
+            check_function = None
+        negative_response_function = target.ecuResetContainer.negative_response_functions[
             parameter
         ]
-        if parameter in target.ecuResetContainer.positiveResponseFunctions:
-            positiveResponseFunction = (
-                target.ecuResetContainer.positiveResponseFunctions[parameter]
+        if parameter in target.ecuResetContainer.positive_response_functions:
+            positive_response_function = (
+                target.ecuResetContainer.positive_response_functions[parameter]
             )
         else:
-            positiveResponseFunction = None
+            positive_response_function = None
 
         # Call the sequence of functions to execute the ECU Reset request/response action ...
         # ==============================================================================
 
-        if checkFunction is None or positiveResponseFunction is None:
-            suppressResponse = True
+        if check_function is None or positive_response_function is None:
+            suppress_response = True
 
         # Create the request. Note: we do not have to pre-check the dataRecord as this action is performed by
         # the recipient (the response codes 0x?? and 0x?? provide the necessary cover of errors in the request) ...
-        request = requestFunction(suppressResponse)
+        request = request_function(suppress_response)
 
-        if suppressResponse == False:
+        if suppress_response == False:
             # Send request and receive the response ...
             response = target.send(
-                request, responseRequired=True
+                request, response_required=True
             )  # ... this returns a single response
-            nrc = negativeResponseFunction(
+            nrc = negative_response_function(
                 response
             )  # ... return nrc value if a negative response is received
             if nrc:
                 return nrc
 
             # We have a positive response so check that it makes sense to us ...
-            checkFunction(response)
+            check_function(response)
 
             # All is still good, so return the response (currently this function does nothing, but including it here as a hook in case that changes) ...
-            return positiveResponseFunction(response)
+            return positive_response_function(response)
 
         # ... else ...
         # Send request and receive the response ...
         response = target.send(
-            request, responseRequired=False
+            request, response_required=False
         )  # ... this suppresses any response handling (not expected)
         return
 
-    def bind_function(self, bindObject):
-        bindObject.ecuReset = MethodType(self.__ecuReset, bindObject)
+    def bind_function(self, bind_object):
+        bind_object.ecuReset = MethodType(self.__ecu_reset, bind_object)
 
-    def add_requestFunction(self, aFunction, dictionaryEntry):
+    def add_request_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.requestFunctions[dictionaryEntry] = aFunction
+            self.request_functions[dictionary_entry] = aFunction
 
-    def add_checkFunction(self, aFunction, dictionaryEntry):
+    def add_check_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.checkFunctions[dictionaryEntry] = aFunction
+            self.check_functions[dictionary_entry] = aFunction
 
-    def add_negativeResponseFunction(self, aFunction, dictionaryEntry):
+    def add_negative_response_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.negativeResponseFunctions[dictionaryEntry] = aFunction
+            self.negative_response_functions[dictionary_entry] = aFunction
 
-    def add_positiveResponseFunction(self, aFunction, dictionaryEntry):
+    def add_positive_response_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.positiveResponseFunctions[dictionaryEntry] = aFunction
+            self.positive_response_functions[dictionary_entry] = aFunction

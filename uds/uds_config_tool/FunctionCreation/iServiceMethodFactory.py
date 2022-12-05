@@ -21,32 +21,32 @@ class IServiceMethodFactory(ABCMeta):
     # @brief method to create the request function for the service element
     @staticmethod
     @abstractmethod
-    def create_requestFunction(diagServiceElement, xmlElements):
-        raise NotImplementedError("create_requestFunction not yet implemented")
+    def create_request_function(diag_service_element, xml_elements):
+        raise NotImplementedError("create_request_function not yet implemented")
 
     ##
     # @brief method to create the function to check the positive response for validity
     @staticmethod
     @abstractmethod
-    def create_checkPositiveResponseFunction(diagServiceElement, xmlElements):
+    def create_check_positive_response_function(diag_service_element, xml_elements):
         raise NotImplementedError(
-            "create_checkPositiveResponseFunction not yet implemented"
+            "create_check_positive_response_function not yet implemented"
         )
 
     ##
     # @brief method to encode the positive response from the raw type to it physical representation
     @staticmethod
     @abstractmethod
-    def create_encodePositiveResponseFunction(diagServiceElement, xmlElements):
+    def create_encode_positive_response_function(diag_service_element, xml_elements):
         raise NotImplementedError(
-            "create_encodePositiveResponseFunction not yet implemented"
+            "create_encode_positive_response_function not yet implemented"
         )
 
     ##
     # @brief method to create the negative response function for the service element
     @staticmethod
     @abstractmethod
-    def create_checkNegativeResponseFunction(diagServiceElement, xmlElements):
+    def create_check_negative_response_function(diag_service_element, xml_elements):
         raise NotImplementedError(
-            "create_checkNegativeResponseFunction not yet implemented"
+            "create_check_negative_response_function not yet implemented"
         )

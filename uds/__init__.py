@@ -5,7 +5,7 @@ name = "uds"
 
 from uds.uds_communications.Utilities.iResettableTimer import iResettableTimer
 from uds.uds_communications.Utilities.ResettableTimer import ResettableTimer
-from uds.uds_communications.Utilities.UtilityFunctions import fillArray
+from uds.uds_communications.Utilities.UtilityFunctions import fill_array
 
 # CAN Imports
 from uds.uds_communications.TransportProtocols.Can import CanTpTypes
@@ -18,7 +18,7 @@ from uds.uds_config_tool import (
     FunctionCreation,
     SupportedServices,
 )
-from uds.uds_config_tool.IHexFunctions import ihexFile
+from uds.uds_config_tool.IHexFunctions import ihex_file
 from uds.uds_config_tool.ISOStandard.ISOStandard import (
     IsoInputOutputControlOptionRecord,
     IsoReadDTCStatusMask,

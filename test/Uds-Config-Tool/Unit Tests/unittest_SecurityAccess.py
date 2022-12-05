@@ -24,7 +24,7 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_securityAccessKeyRequest(self, tp_send, tp_recv):
+    def test_security_access_key_request(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [
@@ -50,7 +50,9 @@ class WDBITestCase(unittest.TestCase):
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
 
         b = a.securityAccess("Programming Request")
@@ -80,13 +82,15 @@ class WDBITestCase(unittest.TestCase):
 
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_securityAccessNegativeResponse(self, tp_send, tp_recv):
+    def test_security_access_negative_response(self, tp_send, tp_recv):
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x21, 0x31]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
 
         b = a.securityAccess("Programming Request")
@@ -97,14 +101,16 @@ class WDBITestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_securityAccessKeyRequest(self, tp_send, tp_recv):
+    def test_security_access_key_request(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x67, 0x02]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
 
         b = a.securityAccess(

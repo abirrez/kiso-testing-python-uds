@@ -20,28 +20,28 @@ class WriteDataByIdentifierContainer(object):
     __metaclass__ = iContainer
 
     def __init__(self):
-        self.requestFunctions = {}
-        self.checkFunctions = {}
-        self.negativeResponseFunctions = {}
-        self.positiveResponseFunctions = {}
+        self.request_functions = {}
+        self.check_functions = {}
+        self.negative_response_functions = {}
+        self.positive_response_functions = {}
 
     ##
     # @brief this method is bound to an external Uds object, referenced by target, so that it can be called
     # as one of the in-built methods. uds.writeDataByIdentifier("something","data record") It does not operate
     # on this instance of the container class.
     @staticmethod
-    def __writeDataByIdentifier(target, parameter, dataRecord, **kwargs):
+    def __write_data_by_identifier(target, parameter, dataRecord, **kwargs):
 
         # Note: WDBI does not show support for multiple DIDs in the spec, so this is handling only a single DID with data record.
-        requestFunction = target.writeDataByIdentifierContainer.requestFunctions[
+        request_function = target.writeDataByIdentifierContainer.request_functions[
             parameter
         ]
-        checkFunction = target.writeDataByIdentifierContainer.checkFunctions[parameter]
-        negativeResponseFunction = (
-            target.writeDataByIdentifierContainer.negativeResponseFunctions[parameter]
+        check_function = target.writeDataByIdentifierContainer.check_functions[parameter]
+        negative_response_function = (
+            target.writeDataByIdentifierContainer.negative_response_functions[parameter]
         )
-        positiveResponseFunction = (
-            target.writeDataByIdentifierContainer.positiveResponseFunctions[parameter]
+        positive_response_function = (
+            target.writeDataByIdentifierContainer.positive_response_functions[parameter]
         )
 
         # Call the sequence of functions to execute the RDBI request/response action ...
@@ -49,35 +49,35 @@ class WriteDataByIdentifierContainer(object):
 
         # Create the request. Note: we do not have to pre-check the dataRecord as this action is performed by
         # the recipient (the response codes 0x13 and 0x31 provide the necessary cover of errors in the request) ...
-        request = requestFunction(dataRecord)
+        request = request_function(dataRecord)
 
         # Send request and receive the response ...
         response = target.send(request)  # ... this returns a single response
-        negativeResponse = negativeResponseFunction(
+        negative_response = negative_response_function(
             response
         )  # ... return nrc value if a negative response is received
-        if negativeResponse:
-            return negativeResponse
+        if negative_response:
+            return negative_response
 
         # We have a positive response so check that it makes sense to us ...
-        checkFunction(response)
+        check_function(response)
 
         # All is still good, so return the response (currently this function does nothing, but including it here as a hook in case that changes) ...
-        return positiveResponseFunction(response)
+        return positive_response_function(response)
 
-    def bind_function(self, bindObject):
-        bindObject.writeDataByIdentifier = MethodType(
-            self.__writeDataByIdentifier, bindObject
+    def bind_function(self, bind_object):
+        bind_object.writeDataByIdentifier = MethodType(
+            self.__write_data_by_identifier, bind_object
         )
 
-    def add_requestFunction(self, aFunction, dictionaryEntry):
-        self.requestFunctions[dictionaryEntry] = aFunction
+    def add_request_function(self, aFunction, dictionary_entry):
+        self.request_functions[dictionary_entry] = aFunction
 
-    def add_checkFunction(self, aFunction, dictionaryEntry):
-        self.checkFunctions[dictionaryEntry] = aFunction
+    def add_check_function(self, aFunction, dictionary_entry):
+        self.check_functions[dictionary_entry] = aFunction
 
-    def add_negativeResponseFunction(self, aFunction, dictionaryEntry):
-        self.negativeResponseFunctions[dictionaryEntry] = aFunction
+    def add_negative_response_function(self, aFunction, dictionary_entry):
+        self.negative_response_functions[dictionary_entry] = aFunction
 
-    def add_positiveResponseFunction(self, aFunction, dictionaryEntry):
-        self.positiveResponseFunctions[dictionaryEntry] = aFunction
+    def add_positive_response_function(self, aFunction, dictionary_entry):
+        self.positive_response_functions[dictionary_entry] = aFunction

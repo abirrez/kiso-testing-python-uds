@@ -30,22 +30,24 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_reqUploadRequest(self, canTp_send, canTp_recv):
+    def test_req_upload_request(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x74, 0x20, 0x05, 0x00]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __requestUpload to requestUpload in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __request_upload to requestUpload in the uds object, so can now call below
 
         b = a.requestUpload(
             FormatIdentifier=[0x00],
             MemoryAddress=[0x40, 0x03, 0xE0, 0x00],
             MemorySize=[0x00, 0x00, 0x0E, 0x56],
-        )  # ... calls __requestUpload, which does the Uds.send
+        )  # ... calls __request_upload, which does the Uds.send
 
         canTp_send.assert_called_with(
             [0x34, 0x00, 0x44, 0x40, 0x03, 0xE0, 0x00, 0x00, 0x00, 0x0E, 0x56], False
@@ -58,22 +60,24 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_reqUploadRequest02(self, canTp_send, canTp_recv):
+    def test_req_upload_request02(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x74, 0x40, 0x01, 0x00, 0x05, 0x08]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __requestUpload to requestUpload in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __request_upload to requestUpload in the uds object, so can now call below
 
         b = a.requestUpload(
             FormatIdentifier=[0x00],
             MemoryAddress=[0x01, 0xFF, 0x0A, 0x80],
             MemorySize=[0x03, 0xFF],
-        )  # ... calls __requestUpload, which does the Uds.send
+        )  # ... calls __request_upload, which does the Uds.send
 
         canTp_send.assert_called_with(
             [
@@ -100,23 +104,25 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_reqUploadNegResponse_0x13(self, canTp_send, canTp_recv):
+    def test_req_upload_request_0x13(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x34, 0x13]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __requestUpload to requestUpload in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __request_upload to requestUpload in the uds object, so can now call below
 
         try:
             b = a.requestUpload(
-                FormatIdentifier=[0x00],
-                MemoryAddress=[0x40, 0x03, 0xE0, 0x00],
-                MemorySize=[0x00, 0x00, 0x0E, 0x56],
-            )  # ... calls __requestUpload, which does the Uds.send
+                FormatIdentifier = [0x00],
+                MemoryAddress = [0x40, 0x03, 0xE0, 0x00],
+                MemorySize = [0x00, 0x00, 0x0E, 0x56],
+            )  # ... calls __request_upload, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -129,23 +135,25 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x31(self, canTp_send, canTp_recv):
+    def test_wdbi_neg_response_0x31(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x34, 0x31]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.requestUpload(
-                FormatIdentifier=[0x00],
-                MemoryAddress=[0x40, 0x03, 0xE0, 0x00],
-                MemorySize=[0x00, 0x00, 0x0E, 0x56],
-            )  # ... calls __requestUpload, which does the Uds.send
+                FormatIdentifier = [0x00],
+                MemoryAddress = [0x40, 0x03, 0xE0, 0x00],
+                MemorySize = [0x00, 0x00, 0x0E, 0x56],
+            )  # ... calls __request_upload, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -158,23 +166,25 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x33(self, canTp_send, canTp_recv):
+    def test_wdbi_neg_response_0x33(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x34, 0x33]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"  
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.requestUpload(
-                FormatIdentifier=[0x00],
-                MemoryAddress=[0x40, 0x03, 0xE0, 0x00],
-                MemorySize=[0x00, 0x00, 0x0E, 0x56],
-            )  # ... calls __requestUpload, which does the Uds.send
+                FormatIdentifier = [0x00],
+                MemoryAddress = [0x40, 0x03, 0xE0, 0x00],
+                MemorySize = [0x00, 0x00, 0x0E, 0x56],
+            )  # ... calls __request_upload, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -187,23 +197,25 @@ class RequestUploadTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_wdbiNegResponse_0x70(self, canTp_send, canTp_recv):
+    def test_wdbi_neg_response_0x70(self, canTp_send, canTp_recv):
 
         canTp_send.return_value = False
         canTp_recv.return_value = [0x7F, 0x34, 0x70]
 
         # Parameters: xml file (odx file), ecu name (not currently used) ...
         a = createUdsConnection(
-            "../Functional Tests/Bootloader.odx", "bootloader", transportProtocol="TEST"
+            "../Functional Tests/Bootloader.odx", 
+            "bootloader", 
+            transport_protocol = "TEST"        
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __readDataByIdentifier to readDataByIdentifier in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __read_data_by_identifier to read_data_by_identifier in the uds object, so can now call below
 
         try:
             b = a.requestUpload(
-                FormatIdentifier=[0x00],
-                MemoryAddress=[0x40, 0x03, 0xE0, 0x00],
-                MemorySize=[0x00, 0x00, 0x0E, 0x56],
-            )  # ... calls __requestUpload, which does the Uds.send
+                FormatIdentifier = [0x00],
+                MemoryAddress = [0x40, 0x03, 0xE0, 0x00],
+                MemorySize = [0x00, 0x00, 0x0E, 0x56],
+            )  # ... calls __request_upload, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

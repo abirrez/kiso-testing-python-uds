@@ -13,11 +13,11 @@ class ihexData(object):
         self.__data = []
 
     @property
-    def startAddress(self):
+    def start_address(self):
         return self.__startAddress
 
-    @startAddress.setter
-    def startAddress(self, value):
+    @start_address.setter
+    def start_address(self, value):
         self.__startAddress = value
 
     @property
@@ -28,15 +28,15 @@ class ihexData(object):
     def data(self, value):
         self.__data = value
 
-    def addData(self, value):
+    def add_data(self, value):
         self.__data += value
 
-    def getDataFromAddress(self, address, size):
-        raise NotImplemented("getDataFromAddress Not yet implemented")
+    def get_data_from_address(self, address, size):
+        raise NotImplemented("get_data_from_address Not yet implemented")
 
 
-class ihexFile(object):
-    def __init__(self, filename=None, padding=0xFF, continuousBlocking=True):
+class ihex_file(object):
+    def __init__(self, filename = None, padding = 0xFF, continuous_blocking = True):
 
         hexFile = open(filename, "r")
 
@@ -45,11 +45,11 @@ class ihexFile(object):
         eof_flag = False
         linecount = 1
 
-        currentAddress = None
-        nextAddress = None
+        current_address = None
+        next_address = None
 
-        currentBlock = None
-        baseAddress = 0
+        current_block = None
+        base_address = 0
 
         while not eof_flag:
 
@@ -58,91 +58,91 @@ class ihexFile(object):
             if line[0] != ":":
                 raise Exception("Unexpected line on line {0}".format(linecount))
 
-            lineArray = bytes.fromhex(line[1:])
+            line_array = bytes.fromhex(line[1:])
 
             # get the main data
             index = 0
-            dataLength = lineArray[index]
+            data_length = line_array[index]
             index += 1
-            address = (lineArray[index] << 8) | (lineArray[index + 1])
+            address = (line_array[index] << 8) | (line_array[index + 1])
             index += 2
-            recordType = lineArray[index]
+            record_type = line_array[index]
             index += 1
-            data = lineArray[index : index + dataLength]
-            index += dataLength
-            checksum = lineArray[index]
+            data = line_array[index : index + data_length]
+            index += data_length
+            checksum = line_array[index]
 
-            calculatedChecksum = 0
+            calculated_checksum = 0
 
-            for i in range(len(lineArray) - 1):
-                calculatedChecksum = (calculatedChecksum + lineArray[i]) % 256
+            for i in range(len(line_array) - 1):
+                calculated_checksum = (calculated_checksum + line_array[i]) % 256
 
-            calculatedChecksum = (~calculatedChecksum + 1) % 256
+            calculated_checksum = (~calculated_checksum + 1) % 256
 
-            if calculatedChecksum != checksum:
+            if calculated_checksum != checksum:
                 raise Exception(
                     "Checksum on line {0} does not match. Actual: {1}, Calculated: {2}".format(
-                        linecount, checksum, calculatedChecksum
+                        linecount, checksum, calculated_checksum
                     )
                 )
 
-            # print("Length: {0:#x}, Address: {1:#x}, recordType: {2:#x}, data: {3}, checksum: {4:#x}, calculatedChecksum: {5:#x}".format(dataLength,
+            # print("Length: {0:#x}, Address: {1:#x}, record_type: {2:#x}, data: {3}, checksum: {4:#x}, calculated_checksum: {5:#x}".format(data_length,
             #                                                                                                                             address,
-            #                                                                                                                             recordType,
+            #                                                                                                                             record_type,
             #                                                                                                                             data,
             #                                                                                                                             checksum,
-            #                                                                                                                             calculatedChecksum))
+            #                                                                                                                             calculated_checksum))
 
-            if recordType == 0x00:
-                if currentAddress is None:
-                    currentBlock.startAddress = baseAddress + address
+            if record_type == 0x00:
+                if current_address is None:
+                    current_block.start_address = base_address + address
 
-                if nextAddress is not None:
-                    if address != nextAddress:
-                        if continuousBlocking:
-                            paddingBlock = []
+                if next_address is not None:
+                    if address != next_address:
+                        if continuous_blocking:
+                            padding_block = []
                             [
-                                paddingBlock.append(padding)
-                                for i in range(0, address - nextAddress)
+                                padding_block.append(padding)
+                                for i in range(0, address - next_address)
                             ]
-                            currentBlock.addData(paddingBlock)
+                            current_block.add_data(padding_block)
                         else:
                             # print("new block")
                             pass
-                currentBlock.addData(data)
-                currentAddress = address
-                nextAddress = address + dataLength
+                current_block.add_data(data)
+                current_address = address
+                next_address = address + data_length
 
-            elif recordType == 0x01:
+            elif record_type == 0x01:
                 eof_flag = True
-                if currentBlock is not None:
-                    self.__blocks.append(currentBlock)
-            elif recordType == 0x02:
+                if current_block is not None:
+                    self.__blocks.append(current_block)
+            elif record_type == 0x02:
                 raise NotImplemented("Not implemented extended segment address")
-            elif recordType == 0x03:
+            elif record_type == 0x03:
                 raise NotImplemented("Start segment address not implemented")
-            elif recordType == 0x04:
+            elif record_type == 0x04:
                 # print("New block")
-                if currentBlock is None:
-                    currentBlock = ihexData()
-                    baseAddress = address << 16
+                if current_block is None:
+                    current_block = ihexData()
+                    base_address = address << 16
                 else:
-                    self.__blocks.append(currentBlock)
+                    self.__blocks.append(current_block)
 
-            elif recordType == 0x05:
+            elif record_type == 0x05:
                 raise NotImplemented("Start linear address not implemented")
 
             linecount += 1
 
             pass
 
-    def getBlocks(self):
+    def get_blocks(self):
         return self.__blocks
 
 
-def calculateKeyFromSeed(seed, ecuKey):
+def calculate_key_from_seed(seed, ecuKey):
 
-    deviceSecret = [
+    device_secret = [
         0x46,
         0x45,
         0x44,
@@ -161,47 +161,51 @@ def calculateKeyFromSeed(seed, ecuKey):
         0x30,
     ]
 
-    md5Input = deviceSecret + seed + deviceSecret
-    c = pack("%sB" % len(md5Input), *md5Input)
+    md5_input = device_secret + seed + device_secret
+    c = pack("%sB" % len(md5_input), *md5_input)
     d = hashlib.md5(c).digest()
     dUnpack = unpack("%sB" % 16, d)
-    sendList = [val for val in dUnpack]
+    send_list = [val for val in dUnpack]
 
-    return sendList
+    return send_list
 
 
 if __name__ == "__main__":
 
     # secondaryBootloaderContainer = chunkIhexFile("TGT-ASSY-1383_v2.1.0_sbl.hex")
     # print(secondaryBootloaderContainer)
-    secondaryBootloader = ihexFile("TGT-ASSY-1383_v2.1.0_sbl.hex")
-    blocks = secondaryBootloader.getBlocks()
-    blockData = blocks[0].data
-    smallerChunks = []
+    secondary_bootloader = ihex_file("TGT-ASSY-1383_v2.1.0_sbl.hex")
+    blocks = secondary_bootloader.get_blocks()
+    block_data = blocks[0].data
+    smaller_chunks = []
     chunk = []
     count = 0
-    for i in range(0, len(blockData)):
-        chunk.append(blockData[i])
+    for i in range(0, len(block_data)):
+        chunk.append(block_data[i])
         count += 1
         if count == 1280:
-            smallerChunks.append(chunk)
+            smaller_chunks.append(chunk)
             chunk = []
             count = 0
 
     if len(chunk) != 0:
-        smallerChunks.append(chunk)
+        smaller_chunks.append(chunk)
 
     e400 = createUdsConnection(
-        "Bootloader.odx", "Bootloader", reqId=0x600, resId=0x650, interface="peak"
+        "Bootloader.odx", 
+        "Bootloader", 
+        reqId=0x600, 
+        resId=0x650, 
+        interface = "peak"
     )
 
-    a = e400.readDataByIdentifier("ECU Serial Number")
+    a = e400.read_data_by_identifier("ECU Serial Number")
     print("Serial Number: {0}".format(a["ECU Serial Number"]))
 
-    a = e400.readDataByIdentifier("PBL Part Number")
+    a = e400.read_data_by_identifier("PBL Part Number")
     print("PBL Part Number: {0}".format(a["PBL Part Number"]))
 
-    a = e400.readDataByIdentifier("PBL Version Number")
+    a = e400.read_data_by_identifier("PBL Version Number")
     print("PBL Version Number: {0}".format(a["PBL Version Number"]))
 
     a = e400.diagnosticSessionControl("Programming Session")
@@ -210,7 +214,7 @@ if __name__ == "__main__":
     a = e400.securityAccess("Programming Request")
     print("Security Key: {0}".format(a))
 
-    b = calculateKeyFromSeed(a, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    b = calculate_key_from_seed(a, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     print("Calculated Key: {0}".format(b))
 
     a = e400.securityAccess("Programming Key", b)
@@ -221,8 +225,8 @@ if __name__ == "__main__":
     # print(a)
 
     print("Transferring Secondary Bootloader")
-    for i in range(len(smallerChunks)):
-        a = e400.transferData(i + 1, smallerChunks[i])
+    for i in range(len(smaller_chunks)):
+        a = e400.transfer_data(i + 1, smaller_chunks[i])
 
     print("Finished Transfer")
     a = e400.transferExit()
@@ -252,30 +256,30 @@ if __name__ == "__main__":
             raise Exception("Erase memory unsuccessful")
         sleep(0.001)
 
-    application = ihexFile("e400_uds_test_app_e400.ihex")
-    blocks = application.getBlocks()
-    blockData = blocks[0].data
-    smallerChunks = []
+    application = ihex_file("e400_uds_test_app_e400.ihex")
+    blocks = application.get_blocks()
+    block_data = blocks[0].data
+    smaller_chunks = []
     chunk = []
     count = 0
-    for i in range(0, len(blockData)):
-        chunk.append(blockData[i])
+    for i in range(0, len(block_data)):
+        chunk.append(block_data[i])
         count += 1
         if count == 1280:
-            smallerChunks.append(chunk)
+            smaller_chunks.append(chunk)
             chunk = []
             count = 0
 
     if len(chunk) != 0:
-        smallerChunks.append(chunk)
+        smaller_chunks.append(chunk)
 
     print("Setting up transfer for Application")
     a = e400.requestDownload([0], [0x00, 0x08, 0x00, 0x00], [0x00, 0x01, 0x62, 0xE4])
 
     print("Transferring Application")
-    for i in range(0, len(smallerChunks)):
+    for i in range(0, len(smaller_chunks)):
 
-        a = e400.transferData(i + 1, smallerChunks[i])
+        a = e400.transfer_data(i + 1, smaller_chunks[i])
 
     print("Transfer Exit")
     a = e400.transferExit()
@@ -294,24 +298,24 @@ if __name__ == "__main__":
         #     print("Aborted")
         a = e400.routineControl("Check Valid Application", 0x03)
 
-        routineStatus = a["Valid Application Status"][0]
-        applicationPresent = a["Valid Application Present"][0]
+        routine_status = a["Valid Application Status"][0]
+        application_present = a["Valid Application Present"][0]
 
-        if routineStatus == 0x30:
+        if routine_status == 0x30:
             working = False
             print("Routine Finished")
 
-            if applicationPresent == 0x01:
+            if application_present == 0x01:
                 print("Application Invalid")
-            elif applicationPresent == 0x02:
+            elif application_present == 0x02:
                 print("Application Valid")
-        elif routineStatus == 0x31:
+        elif routine_status == 0x31:
             working = False
             print("Aborted")
-        elif routineStatus == 0x32:
+        elif routine_status == 0x32:
             # print("Working")
             pass
 
         sleep(0.01)
 
-    e400.ecuReset("Hard Reset", suppressResponse=True)
+    e400.ecuReset("Hard Reset", suppress_response = True)

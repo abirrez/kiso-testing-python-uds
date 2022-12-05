@@ -6,16 +6,16 @@ from time import perf_counter, sleep
 from .iTimer import ITimer
 
 
-def timerFunc(active_flag, expired_flag, timeout):
-    startTime = 0
+def timer_func(active_flag, expired_flag, timeout):
+    start_time = 0
     active_flag_last = False
     while 1:
         if (active_flag_last != active_flag.value) & active_flag.value:
-            startTime = perf_counter()
+            start_time = perf_counter()
         if active_flag.value:
-            currTime = perf_counter()
-            if (currTime - startTime) > timeout.value:
-                print(currTime - startTime)
+            curr_time = perf_counter()
+            if (curr_time - start_time) > timeout.value:
+                print(curr_time - start_time)
                 active_flag.value = False
                 expired_flag.value = True
 
@@ -25,13 +25,13 @@ def timerFunc(active_flag, expired_flag, timeout):
 class MultiprocessingThread(ITimer):
     def __init__(self, timeout):
 
-        self.__startTime = Value("d", 0.00)
+        self.__start_time = Value("d", 0.00)
         self.__expired_flag = Value("B", False)
         self.__active_flag = Value("B", True)
         self.__timeout = Value("d", timeout)
 
         timerProcess = Process(
-            target=timerFunc,
+            target=timer_func,
             args=(self.__active_flag, self.__expired_flag, self.__timeout),
         )
 
@@ -49,10 +49,10 @@ class MultiprocessingThread(ITimer):
         self.__active_flag.value = False
         self.__expired_flag.value = False
 
-    def isExpired(self):
+    def is_expired(self):
         return self.__expired_flag.value
 
-    def isRunning(self):
+    def is_running(self):
         return self.__active_flag.value
 
 
@@ -64,13 +64,13 @@ if __name__ == "__main__":
     results = []
 
     for i in range(0, 10000):
-        startTime = perf_counter()
+        start_time = perf_counter()
         a.start()
-        state = a.isExpired()
+        state = a.is_expired()
         while state == False:
-            state = a.isExpired()
-        endTime = perf_counter()
-        diff = endTime - startTime
+            state = a.is_expired()
+        end_time = perf_counter()
+        diff = end_time - start_time
         results.append(diff)
 
     print("Min: {0}".format(min(results)))

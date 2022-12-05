@@ -22,105 +22,105 @@ class DiagnosticSessionControlContainer(object):
     __metaclass__ = iContainer
 
     def __init__(self):
-        self.requestFunctions = {}
-        self.checkFunctions = {}
-        self.negativeResponseFunctions = {}
-        self.positiveResponseFunctions = {}
+        self.request_functions = {}
+        self.check_functions = {}
+        self.negative_response_functions = {}
+        self.positive_response_functions = {}
 
-        self.testerPresent = {}
-        self.currentSession = None
-        self.lastSend = None
+        self.tester_present = {}
+        self.current_session = None
+        self.last_send = None
 
     ##
     # @brief this method is bound to an external Uds object, referenced by target, so that it can be called
     # as one of the in-built methods. uds.diagnosticSessionControl("session type") It does not operate
     # on this instance of the container class.
     @staticmethod
-    def __diagnosticSessionControl(
+    def __diagnostic_session_control(
         target,
         parameter,
-        suppressResponse=False,
-        testerPresent=False,
-        tpTimeout=defaultTPTimeout,
+        suppress_response=False,
+        tester_present=False,
+        tp_timeout=defaultTPTimeout,
         **kwargs
     ):
 
         # Note: diagnosticSessionControl does not show support for multiple DIDs in the spec, so this is handling only a single DID with data record.
-        requestFunction = target.diagnosticSessionControlContainer.requestFunctions[
+        request_function = target.diagnosticSessionControlContainer.request_functions[
             parameter
         ]
-        if parameter in target.diagnosticSessionControlContainer.checkFunctions:
-            checkFunction = target.diagnosticSessionControlContainer.checkFunctions[
+        if parameter in target.diagnosticSessionControlContainer.check_functions:
+            check_function = target.diagnosticSessionControlContainer.check_functions[
                 parameter
             ]
         else:
-            checkFunction = None
-        negativeResponseFunction = (
-            target.diagnosticSessionControlContainer.negativeResponseFunctions[
+            check_function = None
+        negative_response_function = (
+            target.diagnosticSessionControlContainer.negative_response_functions[
                 parameter
             ]
         )
-        positiveResponseFunction = (
-            target.diagnosticSessionControlContainer.positiveResponseFunctions[
+        positive_response_function = (
+            target.diagnosticSessionControlContainer.positive_response_functions[
                 parameter
             ]
         )
         if (
             parameter
-            in target.diagnosticSessionControlContainer.positiveResponseFunctions
+            in target.diagnosticSessionControlContainer.positive_response_functions
         ):
-            positiveResponseFunction = (
-                target.diagnosticSessionControlContainer.positiveResponseFunctions[
+            positive_response_function = (
+                target.diagnosticSessionControlContainer.positive_response_functions[
                     parameter
                 ]
             )
         else:
-            positiveResponseFunction = None
+            positive_response_function = None
 
         # Call the sequence of functions to execute the Diagnostic Session Control request/response action ...
         # ==============================================================================
 
         # Code additions to support interaction with tester present for a given diagnostic session ...
-        target.diagnosticSessionControlContainer.currentSession = parameter
-        # Note: if testerPresent is set, then timeout is checked every second, so timeout values less than second will always be equivalent to one second.
-        target.diagnosticSessionControlContainer.testerPresent[parameter] = (
-            {"reqd": True, "timeout": tpTimeout}
-            if testerPresent
+        target.diagnosticSessionControlContainer.current_session = parameter
+        # Note: if tester_present is set, then timeout is checked every second, so timeout values less than second will always be equivalent to one second.
+        target.diagnosticSessionControlContainer.tester_present[parameter] = (
+            {"reqd": True, "timeout": tp_timeout}
+            if tester_present
             else {"reqd": False, "timeout": None}
         )
-        # Note: lastSend is initialised via a call to __sessionSetLastSend() when send is called
-        if testerPresent:
+        # Note: last_send is initialised via a call to __session_set_last_send() when send is called
+        if tester_present:
             target.testerPresentThread()
 
         if (
-            checkFunction is None or positiveResponseFunction is None
+            check_function is None or positive_response_function is None
         ):  # ... i.e. we only have a send_only service specified in the ODX
-            suppressResponse = True
+            suppress_response = True
 
         # Create the request. Note: we do not have to pre-check the dataRecord as this action is performed by
         # the recipient (the response codes 0x?? and 0x?? provide the necessary cover of errors in the request) ...
-        request = requestFunction(suppressResponse)
+        request = request_function(suppress_response)
 
-        if suppressResponse == False:  # Send request and receive the response ...
+        if suppress_response == False:  # Send request and receive the response ...
             response = target.send(
-                request, responseRequired=True
+                request, response_required=True
             )  # ... this returns a single response
-            nrc = negativeResponseFunction(
+            nrc = negative_response_function(
                 response
             )  # ... return nrc value if a negative response is received
             if nrc:
                 return nrc
 
             # We have a positive response so check that it makes sense to us ...
-            checkFunction(response)
+            check_function(response)
 
             # All is still good, so return the response (currently this function does nothing, but including it here as a hook in case that changes) ...
-            return positiveResponseFunction(response)
+            return positive_response_function(response)
 
         # ... else ...
         # Send request and receive the response ...
         response = target.send(
-            request, responseRequired=False
+            request, response_required=False
         )  # ... this suppresses any response handling (not expected)
         return
 
@@ -130,13 +130,13 @@ class DiagnosticSessionControlContainer(object):
     # on this instance of the container class.
     # The purpose of this method is to inform the caller of requirement for tester present messages, and if required, at what frequency (in ms)
     @staticmethod
-    def __testerPresentSessionRecord(target, **kwargs):
-        sessionType = target.diagnosticSessionControlContainer.currentSession
-        if sessionType is None:
-            sessionType = "Default Session"
+    def __tester_present_session_record(target, **kwargs):
+        session_type = target.diagnosticSessionControlContainer.current_session
+        if session_type is None:
+            session_type = "Default Session"
         return (
-            target.diagnosticSessionControlContainer.testerPresent[sessionType]
-            if sessionType in target.diagnosticSessionControlContainer.testerPresent
+            target.diagnosticSessionControlContainer.tester_present[session_type]
+            if session_type in target.diagnosticSessionControlContainer.tester_present
             else {"reqd": False, "timeout": None}
         )
 
@@ -146,8 +146,8 @@ class DiagnosticSessionControlContainer(object):
     # on this instance of the container class.
     # The purpose of this method is to record the last send time (any message) for the current diagnostic session.
     @staticmethod
-    def __sessionSetLastSend(target, **kwargs):
-        target.diagnosticSessionControlContainer.lastSend = int(
+    def __session_set_last_send(target, **kwargs):
+        target.diagnosticSessionControlContainer.last_send = int(
             round(time.time())
         )  # ... in seconds
 
@@ -157,15 +157,15 @@ class DiagnosticSessionControlContainer(object):
     # on this instance of the container class.
     # The purpose of this method is to record the last send time (any message) for the current diagnostic session.
     @staticmethod
-    def __testerPresentDisable(target, **kwargs):
-        sessionType = target.diagnosticSessionControlContainer.currentSession
-        if sessionType is None:
-            sessionType = "Default Session"
-        target.diagnosticSessionControlContainer.testerPresent[sessionType] = {
+    def __tester_present_disable(target, **kwargs):
+        session_type = target.diagnosticSessionControlContainer.current_session
+        if session_type is None:
+            session_type = "Default Session"
+        target.diagnosticSessionControlContainer.tester_present[session_type] = {
             "reqd": False,
             "timeout": None,
         }
-        target.diagnosticSessionControlContainer.lastSend = None
+        target.diagnosticSessionControlContainer.last_send = None
 
     ##
     # @brief this method is bound to an external Uds object, referenced by target, so that it can be called
@@ -173,43 +173,43 @@ class DiagnosticSessionControlContainer(object):
     # on this instance of the container class.
     # The purpose of this method is to inform the caller of the time (in seconds) since the last message was sent for the current diagnostic session.
     @staticmethod
-    def __sessionTimeSinceLastSend(target, **kwargs):
+    def __session_time_since_last_send(target, **kwargs):
         now = int(round(time.time()))  # ... in seconds
         try:
-            return now - target.diagnosticSessionControlContainer.lastSend
+            return now - target.diagnosticSessionControlContainer.last_send
         except:
             return 0
 
-    def bind_function(self, bindObject):
-        bindObject.diagnosticSessionControl = MethodType(
-            self.__diagnosticSessionControl, bindObject
+    def bind_function(self, bind_object):
+        bind_object.diagnosticSessionControl = MethodType(
+            self.__diagnostic_session_control, bind_object
         )
-        # Adding an additional functions to allow internal requests to process testerPresent behaviour required for the diagnostic session ...
-        bindObject.testerPresentSessionRecord = MethodType(
-            self.__testerPresentSessionRecord, bindObject
+        # Adding an additional functions to allow internal requests to process tester_present behaviour required for the diagnostic session ...
+        bind_object.testerPresentSessionRecord = MethodType(
+            self.__tester_present_session_record, bind_object
         )
-        bindObject.sessionSetLastSend = MethodType(
-            self.__sessionSetLastSend, bindObject
+        bind_object.sessionSetLastSend = MethodType(
+            self.__session_set_last_send, bind_object
         )
-        bindObject.testerPresentDisable = MethodType(
-            self.__testerPresentDisable, bindObject
+        bind_object.testerPresentDisable = MethodType(
+            self.__tester_present_disable, bind_object
         )
-        bindObject.sessionTimeSinceLastSend = MethodType(
-            self.__sessionTimeSinceLastSend, bindObject
+        bind_object.sessionTimeSinceLastSend = MethodType(
+            self.__session_time_since_last_send, bind_object
         )
 
-    def add_requestFunction(self, aFunction, dictionaryEntry):
+    def add_request_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.requestFunctions[dictionaryEntry] = aFunction
+            self.request_functions[dictionary_entry] = aFunction
 
-    def add_checkFunction(self, aFunction, dictionaryEntry):
+    def add_check_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.checkFunctions[dictionaryEntry] = aFunction
+            self.check_functions[dictionary_entry] = aFunction
 
-    def add_negativeResponseFunction(self, aFunction, dictionaryEntry):
+    def add_negative_response_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.negativeResponseFunctions[dictionaryEntry] = aFunction
+            self.negative_response_functions[dictionary_entry] = aFunction
 
-    def add_positiveResponseFunction(self, aFunction, dictionaryEntry):
+    def add_positive_response_function(self, aFunction, dictionary_entry):
         if aFunction is not None:  # ... allow for a send only version being processed
-            self.positiveResponseFunctions[dictionaryEntry] = aFunction
+            self.positive_response_functions[dictionary_entry] = aFunction

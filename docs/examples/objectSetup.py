@@ -7,7 +7,7 @@ if __name__ == "__main__":
     odxEcu = uds.createUdsConnection("Bootloader.odx", "", inteface="peak")
 
     # This sends a request for Ecu Serial number and stores the result
-    esn = odxEcu.readDataByIdentifier("ECU Serial Number")
+    esn = odxEcu.read_data_by_identifier("ECU Serial Number")
 
     # This will be the printed ASCII string
     print(esn)

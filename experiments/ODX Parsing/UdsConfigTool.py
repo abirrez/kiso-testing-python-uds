@@ -6,15 +6,15 @@ from types import MethodType
 from uds import DecodeFunctions, Uds
 
 
-def get_diagServiceServiceId(diagServiceElement, requests):
+def get_diag_service_service_id(diag_service_element, requests):
 
-    requestElementRef = diagServiceElement.find("REQUEST-REF").attrib["ID-REF"]
+    request_element_ref = diag_service_element.find("REQUEST-REF").attrib["ID-REF"]
 
-    requestElement = requests[requestElementRef]
-    requestElementParamsElement = requestElement.find("PARAMS")
+    request_element = requests[request_element_ref]
+    request_element_params_element = request_element.find("PARAMS")
 
     try:
-        for i in requestElementParamsElement:
+        for i in request_element_params_element:
             if i.attrib["SEMANTIC"] == "SERVICE-ID":
                 return int(i.find("CODED-VALUE").text)
     except AttributeError:
@@ -23,150 +23,150 @@ def get_diagServiceServiceId(diagServiceElement, requests):
     return None
 
 
-def create_sessionControlRequest_function(xmlElement):
+def create_sessionControlRequest_function(xml_element):
 
-    serviceId = None
-    subFunction = None
-    params = xmlElement.find("PARAMS")
+    service_id = None
+    sub_function = None
+    params = xml_element.find("PARAMS")
     for param in params:
         if param.attrib["SEMANTIC"] == "SERVICE-ID":
-            serviceId = int(param.find("CODED-VALUE").text)
+            service_id = int(param.find("CODED-VALUE").text)
         if param.attrib["SEMANTIC"] == "SUBFUNCTION":
-            subFunction = int(param.find("CODED-VALUE").text)
+            sub_function = int(param.find("CODED-VALUE").text)
 
-    req = [serviceId, subFunction]
-    functionName = str("request_{0}").format((xmlElement.find("SHORT-NAME")).text)
+    req = [service_id, sub_function]
+    function_name = str("request_{0}").format((xml_element.find("SHORT-NAME")).text)
 
-    func = str("def {0}():\n" "    return {1}").format(functionName, req)
+    func = str("def {0}():\n" "    return {1}").format(function_name, req)
     exec(func)
-    return locals()[functionName]
+    return locals()[function_name]
 
 
-def create_readDataByIdentifierRequest_function(xmlElement):
+def create_read_data_by_identifierRequest_function(xml_element):
 
-    serviceId = None
-    diagnosticId = None
+    service_id = None
+    diagnostic_id = None
 
-    params = xmlElement.find("PARAMS")
+    params = xml_element.find("PARAMS")
 
     for param in params:
         semantic = param.attrib["SEMANTIC"]
         if semantic == "SERVICE-ID":
-            serviceId = int(param.find("CODED-VALUE").text)
+            service_id = int(param.find("CODED-VALUE").text)
         if semantic == "ID":
-            diagnosticId = int(param.find("CODED-VALUE").text)
+            diagnostic_id = int(param.find("CODED-VALUE").text)
 
-    req = [serviceId] + DecodeFunctions.intArrayToIntArray(
-        [diagnosticId], "int16", "int8"
+    req = [service_id] + DecodeFunctions.int_array_to_int_array(
+        [diagnostic_id], "int16", "int8"
     )
-    functionName = str("request_{0}").format(xmlElement.find("SHORT-NAME").text)
+    function_name = str("request_{0}").format(xml_element.find("SHORT-NAME").text)
 
-    func = str("def {0}():\n" "    return {1}").format(functionName, req)
+    func = str("def {0}():\n" "    return {1}").format(function_name, req)
     exec(func)
-    return locals()[functionName]
+    return locals()[function_name]
 
 
-def create_writeDataByIdentifierRequest_function(xmlElement, dataObjects):
+def create_writeDataByIdentifierRequest_function(xml_element, dataObjects):
 
-    serviceId = None
-    diagnosticId = None
+    service_id = None
+    diagnostic_id = None
 
-    params = xmlElement.find("PARAMS")
+    params = xml_element.find("PARAMS")
 
-    checkFunction = ""
-    encodeFunction = ""
-    inputParams = []
+    check_function = ""
+    encode_function = ""
+    input_params = []
     index = 1
 
     for param in params:
         semantic = param.attrib["SEMANTIC"]
         if semantic == "SERVICE-ID":
-            serviceId = int(param.find("CODED-VALUE").text)
+            service_id = int(param.find("CODED-VALUE").text)
         if semantic == "ID":
-            diagnosticId = int(param.find("CODED-VALUE").text)
+            diagnostic_id = int(param.find("CODED-VALUE").text)
         if semantic == "DATA":
             dataObject = dataObjects[param.find("DOP-REF").attrib["ID-REF"]]
-            diagCodedType = dataObject.find("DIAG-CODED-TYPE")
-            dataType = diagCodedType.attrib["BASE-DATA-TYPE"]
-            length = int(diagCodedType.find("BIT-LENGTH").text)
+            diag_coded_type = dataObject.find("DIAG-CODED-TYPE")
+            dataType = diag_coded_type.attrib["BASE-DATA-TYPE"]
+            length = int(diag_coded_type.find("BIT-LENGTH").text)
             if dataType == "A_ASCIISTRING":
                 inputParam = str("aString{0}").format(index)
-                inputParams.append(inputParam)
+                input_params.append(inputParam)
                 index += 1
-                checkFunction += str(
+                check_function += str(
                     'if(len({1})) != {0}: raise Exception(str("incorrect length of input string. Got: {{0}}: Expected {0}").format(len({1})))'
                 ).format(int(length / 8), inputParam)
-                encodeFunction += str(
-                    " + DecodeFunctions.stringToIntList({0}, None)"
+                encode_function += str(
+                    " + DecodeFunctions.string_to_int_list({0}, None)"
                 ).format(inputParam)
             elif dataType == "A_UINT32":
                 inputParam = str("aInt{0}").format(index)
-                inputParams.append(inputParam)
+                input_params.append(inputParam)
                 index += 1
                 numOfBytes = int(length / 8)
                 if numOfBytes == 1:
-                    inputType = "int8"
+                    input_type = "int8"
                 elif numOfBytes == 2:
-                    inputType = "int16"
+                    input_type = "int16"
                 elif numOfBytes == 3:
-                    inputType = "int24"
+                    input_type = "int24"
                 elif numOfBytes == 4:
-                    inputType = "int32"
-                encodeFunction += str(
-                    " + DecodeFunctions.intArrayToUInt8Array([{0}], '{1}')"
-                ).format(inputParam, inputType)
+                    input_type = "int32"
+                encode_function += str(
+                    " + DecodeFunctions.int_array_to_uint8_array([{0}], '{1}')"
+                ).format(inputParam, input_type)
             else:
                 print("Unknown datatype")
 
-    req = [serviceId] + DecodeFunctions.intArrayToIntArray(
-        [diagnosticId], "int16", "int8"
+    req = [service_id] + DecodeFunctions.int_array_to_int_array(
+        [diagnostic_id], "int16", "int8"
     )
-    functionName = str("request_{0}").format(xmlElement.find("SHORT-NAME").text)
+    function_name = str("request_{0}").format(xml_element.find("SHORT-NAME").text)
 
     try:
         func = str("def {0}({1}):\n" "    {2}\n" "    return {3}{4}").format(
-            functionName, ", ".join(inputParams), checkFunction, req, encodeFunction
+            function_name, ", ".join(input_params), check_function, req, encode_function
         )
     except:
         pass
     exec(func)
-    return locals()[functionName]
+    return locals()[function_name]
 
 
 class RequestMethodFactory(object):
-    def createRequestMethod(xmlElement, dataObjects):
+    def createRequestMethod(xml_element, dataObjects):
         function = None
 
         # extract the service ID to find out how this needs to be decoded
-        paramsElement = xmlElement.find("PARAMS")
+        params_element = xml_element.find("PARAMS")
         params = {}
-        shortName = xmlElement.find("SHORT-NAME").text
-        id = xmlElement.attrib["ID"]
-        for param in paramsElement:
+        short_name = xml_element.find("SHORT-NAME").text
+        id = xml_element.attrib["ID"]
+        for param in params_element:
             try:
                 params[param.attrib["SEMANTIC"]] = param
             except:
                 print("Found param with no semantic field")
                 pass
 
-        serviceId = int(params["SERVICE-ID"].find("CODED-VALUE").text)
+        service_id = int(params["SERVICE-ID"].find("CODED-VALUE").text)
 
         a = None
         # call the relevant method to create the dynamic function
-        if serviceId == 0x10:
-            a = create_sessionControlRequest_function(xmlElement)
-        if serviceId == 0x22:
-            a = create_readDataByIdentifierRequest_function(xmlElement)
-        elif serviceId == 0x2E:
+        if service_id == 0x10:
+            a = create_sessionControlRequest_function(xml_element)
+        if service_id == 0x22:
+            a = create_read_data_by_identifierRequest_function(xml_element)
+        elif service_id == 0x2E:
             try:
                 a = create_writeDataByIdentifierRequest_function(
-                    xmlElement, dataObjects
+                    xml_element, dataObjects
                 )
             except:
                 print("Failed to create WDBI function")
 
         if a is not None:
-            if serviceId != 0x2E:
+            if service_id != 0x2E:
                 print(a())
             else:
                 try:
@@ -184,7 +184,7 @@ class RequestMethodFactory(object):
 
 
 class PositiveResponseFactory(object):
-    def __init__(self, xmlElement, dataObjectElements):
+    def __init__(self, xml_element, dataObjectElements):
         pass
 
 
@@ -193,52 +193,52 @@ class NegativeResponse(object):
     pass
 
 
-def fillDictionary(xmlElement):
+def fillDictionary(xml_element):
     dict = {}
 
-    for i in xmlElement:
+    for i in xml_element:
         dict[i.attrib["ID"]] = i
 
     return dict
 
 
-def create_udsConnection(xmlElement, ecuName):
+def create_udsConnection(xml_element, ecuName):
 
-    dataObjectPropsElement = None
-    diagCommsElement = None
-    requestsElement = None
-    posResponsesElement = None
-    negResponsesElement = None
+    data_object_props_element = None
+    diag_comms_element = None
+    requests_element = None
+    pos_responses_element = None
+    neg_responses_element = None
 
-    for child in xmlElement.iter():
+    for child in xml_element.iter():
         if child.tag == "DATA-OBJECT-PROPS":
-            dataObjectPropsElement = child
+            data_object_props_element = child
         elif child.tag == "DIAG-COMMS":
-            diagCommsElement = child
+            diag_comms_element = child
         elif child.tag == "REQUESTS":
-            requestsElement = child
+            requests_element = child
         elif child.tag == "POS-RESPONSES":
-            posResponsesElement = child
+            pos_responses_element = child
         elif child.tag == "NEG-RESPONSES":
-            negResponsesElement = child
+            neg_responses_element = child
 
-    dataObjectProps = fillDictionary(dataObjectPropsElement)
-    requests = fillDictionary(requestsElement)
-    posResponses = fillDictionary(posResponsesElement)
-    negResponses = fillDictionary(negResponsesElement)
+    data_object_props = fillDictionary(data_object_props_element)
+    requests = fillDictionary(requests_element)
+    pos_responses = fillDictionary(pos_responses_element)
+    neg_responses = fillDictionary(neg_responses_element)
 
-    requestFunctions = {}
-    checkFunctions = {}
-    positiveResponseFunctions = {}
-    negativeResponseFunctions = {}
+    request_functions = {}
+    check_functions = {}
+    positive_response_functions = {}
+    negative_response_functions = {}
 
-    for i in diagCommsElement:
-        requestRef = None
-        posResponseRef = None
-        negResponseRef = None
-        shortName = i.find("SHORT-NAME").text
+    for i in diag_comms_element:
+        request_ref = None
+        pos_response_ref = None
+        neg_response_ref = None
+        short_name = i.find("SHORT-NAME").text
 
-        test = get_diagServiceServiceId(i, requests)
+        test = get_diag_service_service_id(i, requests)
 
         dictEntry = ""
         sdgs = i.find("SDGS")
@@ -249,48 +249,48 @@ def create_udsConnection(xmlElement, ecuName):
                     dictEntry = j.text
 
         print(dictEntry)
-        requestRef = i.find("REQUEST-REF")
+        request_ref = i.find("REQUEST-REF")
         try:
-            posResponseRef = (i.find("POS-RESPONSE-REFS")).find("POS-RESPONSE-REF")
-            negResponseRef = (i.find("NEG-RESPONSE-REFS")).find("NEG-RESPONSE-REF")
+            pos_response_ref = (i.find("POS-RESPONSE-REFS")).find("POS-RESPONSE-REF")
+            neg_response_ref = (i.find("NEG-RESPONSE-REFS")).find("NEG-RESPONSE-REF")
         except (KeyError, AttributeError):
-            posResponseRef = None
-            negResponseRef = None
+            pos_response_ref = None
+            neg_response_ref = None
 
-        requestElement = requests[requestRef.attrib["ID-REF"]]
-        requestFunction = RequestMethodFactory.createRequestMethod(
-            requestElement, dataObjectProps
+        request_element = requests[request_ref.attrib["ID-REF"]]
+        request_function = RequestMethodFactory.createRequestMethod(
+            request_element, data_object_props
         )
 
-        if posResponseRef != None:
-            posResponseElement = posResponses[posResponseRef.attrib["ID-REF"]]
-            posResponse = PositiveResponseFactory(posResponseElement, dataObjectProps)
-        if negResponseRef != None:
-            negResponseElement = negResponses[negResponseRef.attrib["ID-REF"]]
+        if pos_response_ref != None:
+            posResponseElement = pos_responses[pos_response_ref.attrib["ID-REF"]]
+            posResponse = PositiveResponseFactory(posResponseElement, data_object_props)
+        if neg_response_ref != None:
+            negResponseElement = neg_responses[neg_response_ref.attrib["ID-REF"]]
 
-        requestFunctions[shortName] = requestFunction
+        request_functions[short_name] = request_function
 
     temp_ecu = Uds()
 
-    setattr(temp_ecu, "__requestFunctions", requestFunctions)
+    setattr(temp_ecu, "__request_functions", request_functions)
 
-    print(requestFunctions)
+    print(request_functions)
 
-    temp_ecu.readDataByIdentifier = MethodType(readDataByIdentifier, temp_ecu)
+    temp_ecu.read_data_by_identifier = MethodType(read_data_by_identifier, temp_ecu)
 
     print("successfully created ECU")
 
     return temp_ecu
 
 
-def readDataByIdentifier(self, diagnosticIdentifier):
+def read_data_by_identifier(self, diagnosticIdentifier):
 
-    requestFunction = self.__requestFunctions[diagnosticIdentifier]
-    # checkFunction = self.__checkFunctions[diagnosticIdentifier]
-    # negativeResponseFunction = self.__negativeResponseFunctions[diagnosticIdentifier]
-    # positiveResponseFunction = self.__positiveResponseFunctions[diagnosticIdentifier]
+    request_function = self.__request_functions[diagnosticIdentifier]
+    # check_function = self.__checkFunctions[diagnosticIdentifier]
+    # negative_response_function = self.__negativeResponseFunctions[diagnosticIdentifier]
+    # positive_response_function = self.__positiveResponseFunctions[diagnosticIdentifier]
 
-    print(requestFunction())
+    print(request_function())
 
 
 if __name__ == "__main__":
@@ -299,6 +299,6 @@ if __name__ == "__main__":
 
     bootloader = create_udsConnection(tree, "bootloader")
 
-    print(bootloader.readDataByIdentifier("ECU_Serial_Number_Read"))
+    print(bootloader.read_data_by_identifier("ECU_Serial_Number_Read"))
 
     pass

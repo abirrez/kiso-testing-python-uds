@@ -17,27 +17,27 @@ from uds import CanTp
 
 
 class CanTpTestCase(unittest.TestCase):
-    def test_canTpRaiseExceptionOnTooLargePayload(self):
+    def test_can_tp_raise_exception_on_too_large_payload(self):
         payload = []
         for i in range(0, 4096):
             payload.append(0)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
         with self.assertRaises(Exception):
             tpConnection.send(payload)
 
     @patch("can.interfaces.virtual.VirtualBus.send")
-    def test_canTpSendSingleFrame(self, sendMock):
+    def test_can_tp_fend_fingle_frame(self, send_mock):
 
         result = []
 
-        def msgData(msg):
+        def msg_data(msg):
             nonlocal result
             result = msg.data
 
-        sendMock.side_effect = msgData
+        send_mock.side_effect = msg_data
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
         payload = [0x01, 0x02, 0x03]
         tpConnection.send(payload)
@@ -45,37 +45,37 @@ class CanTpTestCase(unittest.TestCase):
         self.assertEqual(result, [0x03, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0x00])
 
     @patch("can.interfaces.virtual.VirtualBus.send")
-    @patch("uds.CanTp.getNextBufferedMessage")
-    def test_smallMultiFrameSend(self, getNextMessageMock, canSendMock):
+    @patch("uds.CanTp.get_next_buffered_message")
+    def test_small_multi_frame_send(self, get_next_message_mock, can_send_mock):
 
         result = []
         count = 1
 
-        fcSent = False
+        fc_sent = False
 
-        def msgData(msg):
+        def msg_data(msg):
 
-            nonlocal getNextMessageMock
+            nonlocal get_next_message_mock
             nonlocal result
 
-            getNextMessageMock.side_effect = getNextMessageFunc
+            get_next_message_mock.side_effect = get_next_message_func
             result += msg.data
 
-        def getNextMessageFunc():
+        def get_next_message_func():
 
-            nonlocal fcSent
+            nonlocal fc_sent
 
-            if fcSent is True:
+            if fc_sent is True:
                 return None
 
-            if fcSent is False:
-                fcSent = True
+            if fc_sent is False:
+                fc_sent = True
                 return [0x30, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
 
-        getNextMessageMock.return_value = None
-        canSendMock.side_effect = msgData
+        get_next_message_mock.return_value = None
+        can_send_mock.side_effect = msg_data
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
         tpConnection.send([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08])
 
@@ -102,37 +102,37 @@ class CanTpTestCase(unittest.TestCase):
         )
 
     @patch("can.interfaces.virtual.VirtualBus.send")
-    @patch("uds.CanTp.getNextBufferedMessage")
-    def test_largerMultiFrameSend(self, getNextMessageMock, canSendMock):
+    @patch("uds.CanTp.get_next_buffered_message")
+    def test_larger_multi_frame_send(self, get_next_message_mock, can_send_mock):
 
         result = []
         count = 1
 
-        fcSent = False
+        fc_sent = False
 
-        def msgData(msg):
+        def msg_data(msg):
 
-            nonlocal getNextMessageMock
+            nonlocal get_next_message_mock
             nonlocal result
 
-            getNextMessageMock.side_effect = getNextMessageFunc
+            get_next_message_mock.side_effect = get_next_message_func
             result += msg.data
 
-        def getNextMessageFunc():
+        def get_next_message_func():
 
-            nonlocal fcSent
+            nonlocal fc_sent
 
-            if fcSent is True:
+            if fc_sent is True:
                 return None
 
-            if fcSent is False:
-                fcSent = True
+            if fc_sent is False:
+                fc_sent = True
                 return [0x30, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
 
-        getNextMessageMock.return_value = None
-        canSendMock.side_effect = msgData
+        get_next_message_mock.return_value = None
+        can_send_mock.side_effect = msg_data
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
         payload = []
         for i in range(1, 41):
@@ -195,20 +195,20 @@ class CanTpTestCase(unittest.TestCase):
         )
 
     @patch("can.interfaces.virtual.VirtualBus.send")
-    @patch("uds.CanTp.getNextBufferedMessage")
+    @patch("uds.CanTp.get_next_buffered_message")
     def test_canTpLargeMultiFrameWithMultipleBlocks(
-        self, getNextMessageMock, canSendMock
+        self, get_next_message_mock, can_send_mock
     ):
 
         result = []
         blockSize = 20
         cfCounter = 0
-        fcSent = False
+        fc_sent = False
 
         ffSent_flag = False
 
-        def msgData(msg):
-            nonlocal getNextMessageMock
+        def msg_data(msg):
+            nonlocal get_next_message_mock
             nonlocal result
             nonlocal ffSent_flag
             nonlocal cfCounter
@@ -218,36 +218,36 @@ class CanTpTestCase(unittest.TestCase):
 
             if ffSent_flag is False:
                 ffSent_flag = True
-                getNextMessageMock.side_effect = getNextMessageFunc
+                get_next_message_mock.side_effect = get_next_message_func
 
             result += msg.data
 
-        def getNextMessageFunc():
+        def get_next_message_func():
 
             nonlocal result
-            nonlocal fcSent
+            nonlocal fc_sent
             nonlocal cfCounter
             nonlocal blockSize
 
-            if fcSent is False:
-                fcSent = True
+            if fc_sent is False:
+                fc_sent = True
                 return [0x30, blockSize, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
 
             if cfCounter == blockSize:
-                fcSent = False
+                fc_sent = False
                 cfCounter = 0
 
-            if fcSent is True:
+            if fc_sent is True:
                 return None
 
-        getNextMessageMock.return_value = None
-        canSendMock.side_effect = msgData
+        get_next_message_mock.return_value = None
+        can_send_mock.side_effect = msg_data
 
         payload = []
         for i in range(0, 500):
             payload.append(i % 256)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
         tpConnection.send(payload)
 
@@ -833,20 +833,20 @@ class CanTpTestCase(unittest.TestCase):
         self.assertEqual(expectedResult, result)
 
     @patch("can.interfaces.virtual.VirtualBus.send")
-    @patch("uds.CanTp.getNextBufferedMessage")
+    @patch("uds.CanTp.get_next_buffered_message")
     def test_canTpLargeMultiFrameWithMultipleBlockChangingBlockSizeDuringTransmission(
-        self, getNextMessageMock, canSendMock
+        self, get_next_message_mock, can_send_mock
     ):
 
         result = []
         blockSize = 20
         cfCounter = 0
-        fcSent = False
+        fc_sent = False
 
         ffSent_flag = False
 
-        def msgData(msg):
-            nonlocal getNextMessageMock
+        def msg_data(msg):
+            nonlocal get_next_message_mock
             nonlocal result
             nonlocal ffSent_flag
             nonlocal cfCounter
@@ -856,37 +856,37 @@ class CanTpTestCase(unittest.TestCase):
 
             if ffSent_flag is False:
                 ffSent_flag = True
-                getNextMessageMock.side_effect = getNextMessageFunc
+                get_next_message_mock.side_effect = get_next_message_func
 
             result += msg.data
 
-        def getNextMessageFunc():
+        def get_next_message_func():
 
             nonlocal result
-            nonlocal fcSent
+            nonlocal fc_sent
             nonlocal cfCounter
             nonlocal blockSize
 
-            if fcSent is False:
-                fcSent = True
+            if fc_sent is False:
+                fc_sent = True
                 return [0x30, blockSize, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00]
 
             if cfCounter == blockSize:
-                fcSent = False
+                fc_sent = False
                 cfCounter = 0
                 blockSize = 10
 
-            if fcSent is True:
+            if fc_sent is True:
                 return None
 
-        getNextMessageMock.return_value = None
-        canSendMock.side_effect = msgData
+        get_next_message_mock.return_value = None
+        can_send_mock.side_effect = msg_data
 
         payload = []
         for i in range(0, 500):
             payload.append(i % 256)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
         tpConnection.send(payload)
 
@@ -1471,50 +1471,50 @@ class CanTpTestCase(unittest.TestCase):
 
         self.assertEqual(expectedResult, result)
 
-    def test_canTpCreateBlock_oneBlockSinglePduNotFull(self):
+    def test_can_tp_create_block_one_block_single_pdu_not_full(self):
 
-        testVal = []
+        test_val = []
         for i in range(0, 6):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 1)
+        a = tpConnection.create_block_list(test_val, 1)
 
         self.assertEqual(a, [[[0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00]]])
 
-    def test_canTpCreateBlock_oneBlockSinglePduFullSameAsBlockSize(self):
+    def test_can_tp_create_block_one_block_single_pdu_full_same_as_block_size(self):
 
-        testVal = []
+        test_val = []
         for i in range(0, 7):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 1)
+        a = tpConnection.create_block_list(test_val, 1)
 
         self.assertEqual(a, [[[0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]]])
 
-    def test_canTpCreateBlock_oneBlockSinglePduFullSmallerThanBlockSize(self):
+    def test_can_tp_create_block_one_block_single_pdu_full_smaller_than_block_size(self):
 
-        testVal = []
+        test_val = []
         for i in range(0, 7):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 2)
+        a = tpConnection.create_block_list(test_val, 2)
 
         self.assertEqual(a, [[[0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]]])
 
-    def test_canTpCreateBlock_oneBlockTwoPduNotFull(self):
-        testVal = []
+    def test_can_tp_create_block_one_block_two_pdu_not_full(self):
+        test_val = []
         for i in range(0, 13):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 2)
+        a = tpConnection.create_block_list(test_val, 2)
 
         self.assertEqual(
             a,
@@ -1526,14 +1526,14 @@ class CanTpTestCase(unittest.TestCase):
             ],
         )
 
-    def test_canTpCreateBlock_oneBlockTwoPduFull(self):
-        testVal = []
+    def test_can_tp_create_block_one_block_two_full(self):
+        test_val = []
         for i in range(0, 14):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 2)
+        a = tpConnection.create_block_list(test_val, 2)
 
         self.assertEqual(
             a,
@@ -1545,14 +1545,14 @@ class CanTpTestCase(unittest.TestCase):
             ],
         )
 
-    def test_canTpCreateBlock_twoBlockTwoPduNotFull(self):
-        testVal = []
+    def test_can_tp_create_block_two_block_two_pdu_not_full(self):
+        test_val = []
         for i in range(0, 27):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 2)
+        a = tpConnection.create_block_list(test_val, 2)
 
         self.assertEqual(
             a,
@@ -1568,14 +1568,14 @@ class CanTpTestCase(unittest.TestCase):
             ],
         )
 
-    def test_canTpCreateBlock_twoBlockTwoPduFull(self):
-        testVal = []
+    def test_can_tp_create_block_two_block_two_full(self):
+        test_val = []
         for i in range(0, 28):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 2)
+        a = tpConnection.create_block_list(test_val, 2)
 
         self.assertEqual(
             a,
@@ -1591,10 +1591,10 @@ class CanTpTestCase(unittest.TestCase):
             ],
         )
 
-    def test_canTpCreateBlock_noBlockSizePdu(self):
-        testVal = []
+    def test_can_tp_create_block_no_block_size_pdu(self):
+        test_val = []
         for i in range(0, 4089):
-            testVal.append(0xFF)
+            test_val.append(0xFF)
 
         result = []
         for i in range(584):
@@ -1602,9 +1602,9 @@ class CanTpTestCase(unittest.TestCase):
 
         result.append([0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
-        tpConnection = CanTp(reqId=0x600, resId=0x650)
+        tpConnection = CanTp(reqId = 0x600, resId = 0x650)
 
-        a = tpConnection.create_blockList(testVal, 585)
+        a = tpConnection.create_block_list(test_val, 585)
 
         self.assertEqual(a[0], result)
 

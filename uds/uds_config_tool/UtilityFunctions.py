@@ -1,11 +1,11 @@
 ##
 # param: a diag service element
 # return: a dictionary with the sdgs data elements
-def getSdgsData(diagServiceElement):
+def get_sdgs_data(diag_service_element):
 
     output = {}
 
-    sdgs = diagServiceElement.find("SDGS")
+    sdgs = diag_service_element.find("SDGS")
     sdg = sdgs.find("SDG")
     for i in sdg:
         try:
@@ -16,14 +16,14 @@ def getSdgsData(diagServiceElement):
 
 
 ##
-# param: a diagServiceElement, an string representing the si attribute
+# param: a diag_service_element, an string representing the si attribute
 # return: a specific entry from the sdgs params, or none if it does not exist
-def getSdgsDataItem(diagServiceElement, itemName):
+def get_sdgs_data_item(diag_service_element, itemName):
 
-    outputDict = getSdgsData(diagServiceElement)
+    output_dict = get_sdgs_data(diag_service_element)
 
     try:
-        output = outputDict[itemName]
+        output = output_dict[itemName]
     except:
         output = None
 
@@ -33,10 +33,10 @@ def getSdgsDataItem(diagServiceElement, itemName):
 ##
 # param: an xml element
 # return: a string with the short name, or None if no short name exists
-def getShortName(xmlElement):
+def get_short_name(xml_element):
 
     try:
-        output = xmlElement.find("SHORT-NAME").text
+        output = xml_element.find("SHORT-NAME").text
     except:
         output = None
 
@@ -46,9 +46,9 @@ def getShortName(xmlElement):
 ##
 # param: an xml element
 # return: a string with the long name, or None if no long name exists
-def getLongName(xmlElement):
+def get_long_name(xml_element):
     try:
-        output = xmlElement.find("LONG-NAME").text
+        output = xml_element.find("LONG-NAME").text
     except:
         output = None
 
@@ -56,13 +56,13 @@ def getLongName(xmlElement):
 
 
 ##
-# param: a diag service element, a list of other xmlElements
+# param: a diag service element, a list of other xml_elements
 # return: an integer
-def getServiceIdFromDiagService(diagServiceElement, xmlElements):
+def get_service_id_from_diag_service(diag_service_element, xml_elements):
 
-    requestKey = diagServiceElement.find("REQUEST-REF").attrib["ID-REF"]
-    requestElement = xmlElements[requestKey]
-    params = requestElement.find("PARAMS")
+    request_key = diag_service_element.find("REQUEST-REF").attrib["ID-REF"]
+    request_element = xml_elements[request_key]
+    params = request_element.find("PARAMS")
     for i in params:
         try:
             if i.attrib["SEMANTIC"] == "SERVICE-ID":
@@ -74,13 +74,13 @@ def getServiceIdFromDiagService(diagServiceElement, xmlElements):
 
 
 ##
-# param: a diag service element, a list of other xmlElements
+# param: a diag service element, a list of other xml_elements
 # return: an integer
-def getResponseIdFromDiagService(diagServiceElement, xmlElements):
+def get_response_id_from_diag_service(diag_service_element, xml_elements):
 
-    requestKey = diagServiceElement.find("REQUEST-REF").attrib["ID-REF"]
-    requestElement = xmlElements[requestKey]
-    params = requestElement.find("PARAMS")
+    request_key = diag_service_element.find("REQUEST-REF").attrib["ID-REF"]
+    request_element = xml_elements[request_key]
+    params = request_element.find("PARAMS")
     for i in params:
         try:
             if i.attrib["SEMANTIC"] == "SERVICE-ID":
@@ -92,87 +92,87 @@ def getResponseIdFromDiagService(diagServiceElement, xmlElements):
 
 
 ##
-# params: an xmlElement, the name of a semantic to match
+# params: an xml_element, the name of a semantic to match
 # return: a single parameter matching the semantic, or a list of parameters which match the semantic
-def getParamWithSemantic(xmlElement, semanticName):
+def get_param_with_semantic(xml_element, semanticName):
 
     output = None
 
     try:
-        params = xmlElement.find("PARAMS")
+        params = xml_element.find("PARAMS")
     except AttributeError:
         return output
 
-    paramsList = []
+    params_list = []
 
     for i in params:
-        paramSemantic = i.attrib["SEMANTIC"]
-        if paramSemantic == semanticName:
-            paramsList.append(i)
+        param_semantic = i.attrib["SEMANTIC"]
+        if param_semantic == semanticName:
+            params_list.append(i)
 
-    if len(paramsList) == 0:
+    if len(params_list) == 0:
         output = None
-    elif len(paramsList) == 1:
-        output = paramsList[0]
+    elif len(params_list) == 1:
+        output = params_list[0]
     else:
-        output = paramsList
+        output = params_list
     return output
 
 
 ##
 # params: a diagnostic service element xml entry, and the dictionary of all possible xml elements
 # return: if only 1 element, then a single xml element, else a list of xml elements, or none if no positive responses
-def getPositiveResponse(diagServiceElement, xmlElements):
+def get_positive_response(diag_service_element, xml_elements):
 
-    positiveResponseList = []
+    positive_response_list = []
     try:
-        positiveResponseReferences = diagServiceElement.find("POS-RESPONSE-REFS")
+        positive_response_references = diag_service_element.find("POS-RESPONSE-REFS")
     except:
         return None
 
-    if positiveResponseReferences is None:
+    if positive_response_references is None:
         return None
     else:
-        for i in positiveResponseReferences:
+        for i in positive_response_references:
             try:
-                positiveResponseList.append(xmlElements[i.attrib["ID-REF"]])
+                positive_response_list.append(xml_elements[i.attrib["ID-REF"]])
             except:
                 pass
 
-    positiveResponseList_length = len(positiveResponseList)
-    if positiveResponseList_length == 0:
+    positive_response_list_length = len(positive_response_list)
+    if positive_response_list_length == 0:
         return None
-    if positiveResponseList_length:
-        return positiveResponseList[0]
+    if positive_response_list_length:
+        return positive_response_list[0]
     else:
-        return positiveResponseList
+        return positive_response_list
 
 
-def getDiagObjectProp(paramElement, xmlElements):
+def get_diag_object_prop(param_element, xml_elements):
 
     try:
-        dopElement = xmlElements[paramElement.find("DOP-REF").attrib["ID-REF"]]
+        dop_element = xml_elements[param_element.find("DOP-REF").attrib["ID-REF"]]
     except:
-        dopElement = None
+        dop_element = None
 
-    return dopElement
+    return dop_element
 
 
-def getBitLengthFromDop(diagObjectPropElement):
+def get_bit_length_from_dop(diag_object_prop_element):
 
     try:
-        bitLength = int(
-            diagObjectPropElement.find("DIAG-CODED-TYPE").find("BIT-LENGTH").text
+        bit_length = int(
+            diag_object_prop_element.find("DIAG-CODED-TYPE").find("BIT-LENGTH").text
         )
     except:
-        bitLength = None
+        bit_length = None
 
-    return bitLength
+    return bit_length
 
 
-def isDiagServiceTransmissionOnly(diagServiceElement):
+def is_diag_service_transmission_only(diag_service_element):
 
-    output = getSdgsDataItem(diagServiceElement, "PositiveResponseSuppressed")
+    output = get_sdgs_data_item(diag_service_element, "PositiveResponseSuppressed")
 
     if output is not None:
         if output == "yes":

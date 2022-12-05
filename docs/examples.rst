@@ -10,7 +10,7 @@ This example sets up the connection using CAN with the Peak-USB Interface. This 
 ::
 from uds import Uds
 
-    E400 = Uds(resId=0x600, reqId=0x650, transportProtocol="CAN", interface="peak", device="PCAN_USBBUS1")
+    E400 = Uds(resId=0x600, reqId=0x650, transport_protocol="CAN", interface="peak", device="PCAN_USBBUS1")
     try:
         response = E400.send([0x22, 0xF1, 0x8C]) # gets the entire response from the ECU
     except:
@@ -34,7 +34,7 @@ It assumes that the Vector hardware has been set up with the application name "p
 
 ::
 
-    E400 = Uds(resId=0x600, reqId=0x650, transportProtocol="can", interface="vector", appName="pythonUds", channel=0)
+    E400 = Uds(resId=0x600, reqId=0x650, transport_protocol="can", interface="vector", appName="pythonUds", channel=0)
 
 Once this is initialised then the communication with the ECU is the same as Example 1
 
@@ -45,7 +45,7 @@ This example sets up a connection over LIN
 
 ::
 
-    LightModule = Uds(nodeAddress=0x10, transportProtocol="LIN")
+    LightModule = Uds(nodeAddress=0x10, transport_protocol="LIN")
 
 Once this is initialised then the communication with the ECU is the same as Example 1
 
@@ -57,11 +57,11 @@ CAN using Peak Interface with Bootloader Example ODX file.
 ::
 
     bootloader = createUdsConnection("Bootloader.odx", "", reqId=0x600, resId=0x650, interface="peak")
-    serialNumber = bootloader.readDataByIdentifier("ECU Serial Number")
+    serialNumber = bootloader.read_data_by_identifier("ECU Serial Number")
     print(serialNumber)
     bootloader.writeDataByIdentifier("Engine Speed Cutoff", 5000)
     
-This example uses the readDataByIdentifier and writeDataByIdentifier to get the Serial Number and set the Engine Speed Cutoff parameter used by the model. The string used to identify the instance of the service is defined in the ODX file as a human readable value to ease interfacing with the module.
+This example uses the read_data_by_identifier and writeDataByIdentifier to get the Serial Number and set the Engine Speed Cutoff parameter used by the model. The string used to identify the instance of the service is defined in the ODX file as a human readable value to ease interfacing with the module.
 
 The returned values are encoded into their physical datatype defined in the ODX file rather than the user having to know the encoding format.
 

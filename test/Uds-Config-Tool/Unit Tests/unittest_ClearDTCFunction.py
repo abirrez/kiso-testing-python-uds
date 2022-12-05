@@ -27,7 +27,7 @@ class IOControlTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ioControlRequest_adjust(self, tp_send, tp_recv):
+    def test_io_control_request_adjust(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x54]
@@ -36,13 +36,13 @@ class IOControlTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __inputOutputControl to inputOutputControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __input_output_control to inputOutputControl in the uds object, so can now call below
 
         b = a.clearDTC(
             [0xF1, 0xC8, 0x55]
-        )  # ... calls __clearDTC, which does the Uds.send
+        )  # ... calls __clear_DTC, which does the Uds.send
 
         tp_send.assert_called_with([0x14, 0xF1, 0xC8, 0x55], False)
         self.assertEqual(None, b)
@@ -50,7 +50,7 @@ class IOControlTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x13(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x13(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x14, 0x13]
@@ -59,14 +59,14 @@ class IOControlTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __inputOutputControl to inputOutputControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __input_output_control to inputOutputControl in the uds object, so can now call below
 
         try:
             b = a.clearDTC(
                 [0xF1, 0xC8, 0x55]
-            )  # ... calls __clearDTC, which does the Uds.send
+            )  # ... calls __clear_DTC, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -77,7 +77,7 @@ class IOControlTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x22(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x22(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x14, 0x22]
@@ -86,14 +86,14 @@ class IOControlTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __inputOutputControl to inputOutputControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __input_output_control to inputOutputControl in the uds object, so can now call below
 
         try:
             b = a.clearDTC(
                 [0xF1, 0xC8, 0x55]
-            )  # ... calls __clearDTC, which does the Uds.send
+            )  # ... calls __clear_DTC, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0
@@ -104,7 +104,7 @@ class IOControlTestCase(unittest.TestCase):
     # patches are inserted in reverse order
     @mock.patch("uds.TestTp.recv")
     @mock.patch("uds.TestTp.send")
-    def test_ecuResetNegResponse_0x31(self, tp_send, tp_recv):
+    def test_ecu_reset_neg_response_0x31(self, tp_send, tp_recv):
 
         tp_send.return_value = False
         tp_recv.return_value = [0x7F, 0x14, 0x31]
@@ -113,14 +113,14 @@ class IOControlTestCase(unittest.TestCase):
         a = createUdsConnection(
             "../Functional Tests/EBC-Diagnostics_old.odx",
             "bootloader",
-            transportProtocol="TEST",
+            transport_protocol = "TEST",
         )
-        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __inputOutputControl to inputOutputControl in the uds object, so can now call below
+        # ... creates the uds object and returns it; also parses out the rdbi info and attaches the __input_output_control to inputOutputControl in the uds object, so can now call below
 
         try:
             b = a.clearDTC(
                 [0xF1, 0xC8, 0x55]
-            )  # ... calls __clearDTC, which does the Uds.send
+            )  # ... calls __clear_DTC, which does the Uds.send
         except:
             b = traceback.format_exc().split("\n")[-2:-1][
                 0

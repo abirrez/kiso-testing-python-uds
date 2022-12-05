@@ -23,9 +23,9 @@ from uds import DecodeFunctions
 
 def check_Boot_Software_Identification_Read(payload):
 
-    expectedLength = 28
+    EXPECTEDLENGTH = 28
 
-    if len(payload) != expectedLength:
+    if len(payload) != EXPECTEDLENGTH:
         raise Exception(
             "Unexpected length of response: Received length: "
             + str(len(payload))
@@ -33,23 +33,23 @@ def check_Boot_Software_Identification_Read(payload):
             + str(payload)
         )
 
-    positiveResponse = 0x62
-    negativeResponse = 0x7F
+    POSITIVE_RESPONSE = 0x62
+    NEGATIVE_RESPONSE = 0x7F
 
-    responseReceived = payload[0]
+    response_received = payload[0]
 
-    if responseReceived == positiveResponse:
-        diagnosticIdentifier_expected = 0xF180
-        diagnosticIdentifier_received = DecodeFunctions.buildIntFromList(payload[1:3])
+    if response_received == POSITIVE_RESPONSE:
+        diagnostic_identifier_expected = 0xF180
+        diagnostic_identifier_received = DecodeFunctions.build_int_from_list(payload[1:3])
 
-        if diagnosticIdentifier_expected != diagnosticIdentifier_received:
+        if diagnostic_identifier_expected != diagnostic_identifier_received:
             raise Exception(
                 "Diagnostic identifier does not match expected response: Payload: "
                 + str(payload)
             )
 
         return None
-    elif responseReceived == negativeResponse:
+    elif response_received == NEGATIVE_RESPONSE:
         # needs improvement to define the exact negative response received
         raise Exception("Negative response received: Payload: " + str(payload))
     else:
@@ -62,13 +62,13 @@ def decode_Boot_Software_Identification_Read(payload):
     check_Boot_Software_Identification_Read(payload)
 
     # dynamic
-    numberOfModules = payload[3:4]
-    Boot_Software_Identification = payload[4:28]
+    number_of_modules = payload[3:4]
+    boot_Software_Identification = payload[4:28]
 
     result = {}
-    result["numberOfModules"] = numberOfModules[0]
-    result["Boot Software Identification"] = DecodeFunctions.intListToString(
-        Boot_Software_Identification, "ISO-8859-1"
+    result["numberOfModules"] = number_of_modules[0]
+    result["Boot Software Identification"] = DecodeFunctions.int_list_to_string(
+        boot_Software_Identification, "ISO-8859-1"
     )
 
     return result

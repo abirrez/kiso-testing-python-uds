@@ -14,10 +14,10 @@ class ResettableTimer(ITimer):
         self.__active_flag = False
         self.__expired_flag = False
 
-        self.__startTime = 0
+        self.__start_time = 0
 
     def start(self):
-        self.__startTime = perf_counter()
+        self.__start_time = perf_counter()
         self.__active_flag = True
         self.__expired_flag = False
 
@@ -27,9 +27,9 @@ class ResettableTimer(ITimer):
     def stop(self):
         self.__active_flag = False
 
-    def isExpired(self):
+    def is_expired(self):
         if self.__active_flag:
-            if (perf_counter() - self.__startTime) > self.__timeout:
+            if (perf_counter() - self.__start_time) > self.__timeout:
                 self.__active_flag = False
                 self.__expired_flag = True
                 return self.__expired_flag
@@ -37,7 +37,7 @@ class ResettableTimer(ITimer):
                 return False
         return self.__expired_flag
 
-    def isRunning(self):
+    def is_running(self):
         return self.__active_flag
 
 
@@ -46,12 +46,12 @@ if __name__ == "__main__":
 
     results = []
     for i in range(0, 10000):
-        startTime = perf_counter()
+        start_time = perf_counter()
         a.start()
-        while a.isExpired() == False:
+        while a.is_expired() == False:
             pass
-        endTime = perf_counter()
-        delta = endTime - startTime
+        end_time = perf_counter()
+        delta = end_time - start_time
         results.append(delta)
 
     print("Min: {0}".format(min(results)))

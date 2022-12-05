@@ -20,96 +20,96 @@ class CanTpMessageTestCase(unittest.TestCase):
 
     ##
     # @brief tests the initialisation transition
-    def testStateWhenInitialised(self):
+    def test_state_when_initialised(self):
         a = ResettableTimer(0.6)
-        self.assertEqual(False, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(False, a.is_running())
+        self.assertEqual(False, a.is_expired())
 
     ##
     # @brief tests the state after starting
-    def testStateAfterStart(self):
+    def test_state_after_start(self):
         a = ResettableTimer(0.2)
         a.start()
-        self.assertEqual(True, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(True, a.is_running())
+        self.assertEqual(False, a.is_expired())
 
     ##
     # @brief tests state after timeout
-    def testStateAfterTimeoutTime(self):
+    def test_state_after_timeout_time(self):
         a = ResettableTimer(0.2)
         a.start()
         sleep(0.25)
-        self.assertEqual(False, a.isRunning())
-        self.assertEqual(True, a.isExpired())
+        self.assertEqual(False, a.is_running())
+        self.assertEqual(True, a.is_expired())
 
     ##
     # @brief tests state after reset
-    def testStateAfterRestart(self):
+    def test_state_after_restart(self):
         a = ResettableTimer(0.4)
         a.start()
         sleep(0.3)
         a.restart()
         sleep(0.2)
-        self.assertEqual(True, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(True, a.is_running())
+        self.assertEqual(False, a.is_expired())
 
     ##
     # @brief tests state for restart while running
-    def testStateAfterRestartAndExpiry(self):
+    def test_state_after_restart_and_expiry(self):
         a = ResettableTimer(0.4)
         a.start()
         sleep(0.3)
-        self.assertEqual(False, a.isExpired())
-        self.assertEqual(True, a.isRunning())
+        self.assertEqual(False, a.is_expired())
+        self.assertEqual(True, a.is_running())
         a.restart()
         sleep(0.45)
-        self.assertEqual(True, a.isExpired())
-        self.assertEqual(False, a.isRunning())
+        self.assertEqual(True, a.is_expired())
+        self.assertEqual(False, a.is_running())
 
     ##
     # @brief tests state for restart after expiry
-    def testStateAfterExpiredThenRestart(self):
+    def test_state_after_expired_then_restart(self):
         a = ResettableTimer(0.4)
         a.start()
         sleep(0.45)
-        self.assertEqual(False, a.isRunning())
-        self.assertEqual(True, a.isExpired())
+        self.assertEqual(False, a.is_running())
+        self.assertEqual(True, a.is_expired())
         a.restart()
-        self.assertEqual(True, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(True, a.is_running())
+        self.assertEqual(False, a.is_expired())
 
     ##
     # @brief tests state after a stop
-    def testStopAfterStart(self):
+    def test_stop_after_start(self):
         a = ResettableTimer(0.4)
         a.start()
-        self.assertEqual(True, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(True, a.is_running())
+        self.assertEqual(False, a.is_expired())
         a.stop()
-        self.assertEqual(False, a.isRunning())
-        self.assertEqual(False, a.isExpired())
+        self.assertEqual(False, a.is_running())
+        self.assertEqual(False, a.is_expired())
 
     ##
     # @brief tests state with a 0 timeout
-    def testIsExpiredWith0Time(self):
+    def test_is_expired_with0_time(self):
         a = ResettableTimer(0)
         a.start()
-        self.assertEqual(False, a.isRunning())
-        self.assertEqual(True, a.isExpired())
+        self.assertEqual(False, a.is_running())
+        self.assertEqual(True, a.is_expired())
 
     ##
     # @brief tests the accuracy of the timer
-    def testTimerAccuracy(self):
+    def test_timer_accuracy(self):
         testTimes = [1, 0.3, 0.2, 0.1, 0.01, 0.01]
         for i in testTimes:
             a = ResettableTimer(i)
-            startTime = perf_counter()
+            start_time = perf_counter()
             a.start()
-            while a.isRunning():
+            while a.is_running():
                 pass
-            endTime = perf_counter()
-            delta = endTime - startTime
-            self.assertAlmostEqual(delta, i, delta=0.001)
+            end_time = perf_counter()
+            delta = end_time - start_time
+            self.assertAlmostEqual(delta, i, delta = 0.001)
 
 
 if __name__ == "__main__":
